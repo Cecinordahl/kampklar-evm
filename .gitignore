@@ -1,0 +1,9 @@
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+*-service-account*.json
+firebase-adminsdk*.json
+
+# OS
+.DS_Store
