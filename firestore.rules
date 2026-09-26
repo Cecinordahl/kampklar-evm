@@ -1,0 +1,12 @@
+rules_version = '2';
+
+// Public, read-only data. All writes go through the backend, whose Admin SDK bypasses these
+// rules - so no client (not even the signed-in admin) can write to Firestore directly.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{collection}/{docId} {
+      allow read: if collection in ['competitions', 'divisions', 'groups', 'teams', 'players', 'matches'];
+      allow write: if false;
+    }
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "_source": "UEFA.com, '2026/27 UEFA Nations League: All the league phase fixtures and results', fetched 2026-09-26",
+  "competition": {
+    "id": "unl-2026-27",
+    "name": "UEFA Nations League",
+    "season": "2026/27"
+  },
+  "divisions": [
+    {
+      "id": "unl-2026-27-a",
+      "name": "Liga A"
+    }
+  ],
+  "kickoffTimeZone": "Europe/Oslo",
+  "teams": [
+    {
+      "id": "france",
+      "name": "Frankrike"
+    },
+    {
+      "id": "italy",
+      "name": "Italia"
+    },
+    {
+      "id": "belgium",
+      "name": "Belgia"
+    },
+    {
+      "id": "turkiye",
+      "name": "Tyrkia"
+    },
+    {
+      "id": "england",
+      "name": "England"
+    },
+    {
+      "id": "spain",
+      "name": "Spania"
+    },
+    {
+      "id": "croatia",
+      "name": "Kroatia"
+    },
+    {
+      "id": "czechia",
+      "name": "Tsjekkia"
+    },
+    {
+      "id": "portugal",
+      "name": "Portugal"
+    },
+    {
+      "id": "norway",
+      "name": "Norge"
+    },
+    {
+      "id": "denmark",
+      "name": "Danmark"
+    },
+    {
+      "id": "wales",
+      "name": "Wales"
+    }
+  ],
+  "groups": [
+    {
+      "id": "unl-2026-27-a1",
+      "divisionId": "unl-2026-27-a",
+      "name": "A1",
+      "teamIds": [
+        "italy",
+        "belgium",
+        "france",
+        "turkiye"
+      ]
+    },
+    {
+      "id": "unl-2026-27-a3",
+      "divisionId": "unl-2026-27-a",
+      "name": "A3",
+      "teamIds": [
+        "england",
+        "spain",
+        "croatia",
+        "czechia"
+      ]
+    },
+    {
+      "id": "unl-2026-27-a4",
+      "divisionId": "unl-2026-27-a",
+      "name": "A4",
+      "teamIds": [
+        "portugal",
+        "norway",
+        "denmark",
+        "wales"
+      ]
+    }
+  ],
+  "matches": [
+    {
+      "id": "unl-2026-27-a1-italy-belgium",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "italy",
+      "awayTeamId": "belgium",
+      "localKickoff": "2026-09-25T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-turkiye-france",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "turkiye",
+      "awayTeamId": "france",
+      "localKickoff": "2026-09-25T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-belgium-france",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "belgium",
+      "awayTeamId": "france",
+      "localKickoff": "2026-09-28T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-turkiye-italy",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "turkiye",
+      "awayTeamId": "italy",
+      "localKickoff": "2026-09-28T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-belgium-turkiye",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "belgium",
+      "awayTeamId": "turkiye",
+      "localKickoff": "2026-10-02T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-france-italy",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "france",
+      "awayTeamId": "italy",
+      "localKickoff": "2026-10-02T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-france-belgium",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "france",
+      "awayTeamId": "belgium",
+      "localKickoff": "2026-10-05T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-italy-turkiye",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "italy",
+      "awayTeamId": "turkiye",
+      "localKickoff": "2026-10-05T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-turkiye-belgium",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "turkiye",
+      "awayTeamId": "belgium",
+      "localKickoff": "2026-11-12T18:00"
+    },
+    {
+      "id": "unl-2026-27-a1-italy-france",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "italy",
+      "awayTeamId": "france",
+      "localKickoff": "2026-11-12T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-belgium-italy",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "belgium",
+      "awayTeamId": "italy",
+      "localKickoff": "2026-11-15T20:45"
+    },
+    {
+      "id": "unl-2026-27-a1-france-turkiye",
+      "groupId": "unl-2026-27-a1",
+      "homeTeamId": "france",
+      "awayTeamId": "turkiye",
+      "localKickoff": "2026-11-15T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-czechia-croatia",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "czechia",
+      "awayTeamId": "croatia",
+      "localKickoff": "2026-09-26T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-england-spain",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "england",
+      "awayTeamId": "spain",
+      "localKickoff": "2026-09-26T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-czechia-england",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "czechia",
+      "awayTeamId": "england",
+      "localKickoff": "2026-09-29T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-spain-croatia",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "spain",
+      "awayTeamId": "croatia",
+      "localKickoff": "2026-09-29T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-croatia-england",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "croatia",
+      "awayTeamId": "england",
+      "localKickoff": "2026-10-03T18:00"
+    },
+    {
+      "id": "unl-2026-27-a3-spain-czechia",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "spain",
+      "awayTeamId": "czechia",
+      "localKickoff": "2026-10-03T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-croatia-spain",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "croatia",
+      "awayTeamId": "spain",
+      "localKickoff": "2026-10-06T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-england-czechia",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "england",
+      "awayTeamId": "czechia",
+      "localKickoff": "2026-10-06T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-czechia-spain",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "czechia",
+      "awayTeamId": "spain",
+      "localKickoff": "2026-11-12T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-england-croatia",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "england",
+      "awayTeamId": "croatia",
+      "localKickoff": "2026-11-12T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-croatia-czechia",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "croatia",
+      "awayTeamId": "czechia",
+      "localKickoff": "2026-11-15T20:45"
+    },
+    {
+      "id": "unl-2026-27-a3-spain-england",
+      "groupId": "unl-2026-27-a3",
+      "homeTeamId": "spain",
+      "awayTeamId": "england",
+      "localKickoff": "2026-11-15T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-norway-denmark",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "norway",
+      "awayTeamId": "denmark",
+      "localKickoff": "2026-09-24T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-portugal-wales",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "portugal",
+      "awayTeamId": "wales",
+      "localKickoff": "2026-09-24T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-denmark-wales",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "denmark",
+      "awayTeamId": "wales",
+      "localKickoff": "2026-09-27T18:00"
+    },
+    {
+      "id": "unl-2026-27-a4-norway-portugal",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "norway",
+      "awayTeamId": "portugal",
+      "localKickoff": "2026-09-27T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-denmark-portugal",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "denmark",
+      "awayTeamId": "portugal",
+      "localKickoff": "2026-10-01T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-wales-norway",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "wales",
+      "awayTeamId": "norway",
+      "localKickoff": "2026-10-01T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-portugal-norway",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "portugal",
+      "awayTeamId": "norway",
+      "localKickoff": "2026-10-04T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-wales-denmark",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "wales",
+      "awayTeamId": "denmark",
+      "localKickoff": "2026-10-04T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-norway-wales",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "norway",
+      "awayTeamId": "wales",
+      "localKickoff": "2026-11-14T18:00"
+    },
+    {
+      "id": "unl-2026-27-a4-portugal-denmark",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "portugal",
+      "awayTeamId": "denmark",
+      "localKickoff": "2026-11-14T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-denmark-norway",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "denmark",
+      "awayTeamId": "norway",
+      "localKickoff": "2026-11-17T20:45"
+    },
+    {
+      "id": "unl-2026-27-a4-wales-portugal",
+      "groupId": "unl-2026-27-a4",
+      "homeTeamId": "wales",
+      "awayTeamId": "portugal",
+      "localKickoff": "2026-11-17T20:45"
+    }
+  ]
+}
