@@ -2,11 +2,13 @@ package no.kampklar.evm.service;
 
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
+import no.kampklar.evm.model.Coach;
 import no.kampklar.evm.model.Group;
 import no.kampklar.evm.model.Match;
 import no.kampklar.evm.model.MatchStatus;
 import no.kampklar.evm.model.Player;
 import no.kampklar.evm.model.Standing;
+import no.kampklar.evm.model.TournamentHistoryEntry;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.Map;
 final class FirestoreDocuments {
 
     static final String GROUPS = "groups";
+    static final String TEAMS = "teams";
     static final String MATCHES = "matches";
     static final String PLAYERS = "players";
 
@@ -43,8 +46,35 @@ final class FirestoreDocuments {
                 doc.getString("teamId"),
                 doc.getString("name"),
                 doc.getString("position"),
+                doc.getString("club"),
                 intOrZero(doc.getLong("caps")),
-                intOrZero(doc.getLong("goals")));
+                intOrZero(doc.getLong("goals")),
+                !Boolean.FALSE.equals(doc.getBoolean("inSquad")));
+    }
+
+    static Map<String, Object> fromPlayer(Player player) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("teamId", player.teamId());
+        fields.put("name", player.name());
+        fields.put("position", player.position());
+        fields.put("club", player.club());
+        fields.put("caps", player.caps());
+        fields.put("goals", player.goals());
+        fields.put("inSquad", player.inSquad());
+        return fields;
+    }
+
+    static Map<String, Object> fromCoach(Coach coach) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("name", coach.name());
+        fields.put("nationality", coach.nationality());
+        return fields;
+    }
+
+    static List<Map<String, Object>> fromTournamentHistory(List<TournamentHistoryEntry> entries) {
+        return entries.stream()
+                .map(e -> Map.<String, Object>of("tournament", e.tournament(), "year", e.year(), "result", e.result()))
+                .toList();
     }
 
     static Match toMatch(DocumentSnapshot doc) {
