@@ -1,5 +1,6 @@
 import { signOutAdmin, useAdminAuth } from "../lib/auth";
 import { Loading } from "../components/Status";
+import { BackendStatusBanner } from "../components/admin/BackendStatusBanner";
 import { LoginForm } from "../components/admin/LoginForm";
 import { MatchEntrySection } from "../components/admin/MatchEntrySection";
 import { TeamRefreshSection } from "../components/admin/TeamRefreshSection";
@@ -19,6 +20,7 @@ export function AdminPage() {
         </button>
       </div>
       <p className="muted small">Innlogget som {user.email}</p>
+      <BackendStatusBanner />
 
       <MatchEntrySection />
       <TeamRefreshSection />

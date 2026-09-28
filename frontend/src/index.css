@@ -573,3 +573,27 @@ tr.highlight td {
   border-radius: var(--radius);
   padding: 0.25rem 1rem;
 }
+
+.backend-status {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem 0.75rem;
+}
+
+.backend-status p {
+  margin: 0 0 0.5rem;
+}
+
+.backend-status-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.backend-status-fill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 1s linear;
+}

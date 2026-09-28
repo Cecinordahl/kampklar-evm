@@ -25,6 +25,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins(frontendOrigin)
                 .allowedMethods("GET", "POST", "PUT")
                 .allowedHeaders("Authorization", "Content-Type");
+        registry.addMapping("/health")
+                .allowedOrigins(frontendOrigin)
+                .allowedMethods("GET");
     }
 
     @Override
