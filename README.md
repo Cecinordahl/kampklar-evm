@@ -32,6 +32,36 @@ npm install
 npm run dev
 ```
 
+### Firestore rules and seed data (once per Firebase project)
+```
+firebase use --add                               # pick the Firebase project
+firebase deploy --only firestore:rules           # public read-only, no client writes
+
+cd backend
+./mvnw spring-boot:run -Dspring-boot.run.profiles=seed
+```
+The seed loads competitions, groups, teams and all fixtures from
+`backend/src/main/resources/seed/unl-2026-27.json`, then exits. It is safe to re-run: it never
+overwrites existing matches, results, standings or team data. Results are entered through the
+admin endpoint, not the seed file.
+
+### Admin account (once per Firebase project)
+1. Firebase console > Authentication > Sign-in method: enable **Email/Password**.
+2. Authentication > Users > Add user: create the single admin account.
+3. Copy that user's UID into the backend's `ADMIN_UID`.
+
+The admin view lives at `/admin` (not linked from the public pages). The backend verifies the
+admin's token and UID on every request; the page itself only decides what to show.
+
+### Local development with the Firebase emulators
+No real project or credentials needed:
+```
+firebase emulators:start --only firestore,auth --project demo-kampklar
+```
+- Backend: set `FIRESTORE_EMULATOR_HOST=127.0.0.1:8085` and `FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099`
+  (the service account JSON can then be any well-formed placeholder with `project_id` `demo-kampklar`).
+- Frontend: set `VITE_USE_FIREBASE_EMULATORS=true` and `VITE_FIREBASE_PROJECT_ID=demo-kampklar` in `frontend/.env.local`.
+
 ## Deployment
 - Backend: Render (free web service tier)
 - Frontend: Vercel (free tier)
