@@ -1,0 +1,87 @@
+{
+  "_meta": {
+    "description": "Innhold for EM-siden: EM 2028 (kvalik + sluttspill), formathistorikk og alle finaler.",
+    "generatedAt": "2026-09-29",
+    "verification": "Kvalik/sluttspill 2028 fra UEFA.com (se sources). Finaler og formathistorikk 1960–2024 er godt dokumentert historikk, ikke hentet fra én enkelt kilde – les over før publisering.",
+    "sources": [
+      "https://www.uefa.com/euro2028/news/0299-1dcf3fef69a9-41405d004b47-1000--qualification-system-for-uefa-euro-2028-approved/",
+      "https://www.uefa.com/euro2028/news/028f-1b599fe02d18-0c758142f5e4-1000--euro-2028-all-you-need-to-know/",
+      "https://www.uefa.com/euro2028/news/029f-1f2ff991e87b-345fffcd69c3-1000--uefa-euro-2028-qualifying-draw-to-take-place-in-belfast/",
+      "https://en.wikipedia.org/wiki/UEFA_Euro_2028_qualifying"
+    ]
+  },
+  "next": {
+    "name": "EM 2028",
+    "hosts": ["England", "Irland", "Skottland", "Wales"],
+    "dates": { "start": "2028-06-09", "end": "2028-07-09" },
+    "finalVenue": "Wembley, London",
+    "stadiumCount": 9,
+    "teams": 24,
+    "qualification": {
+      "drawDate": "2026-12-06",
+      "drawPlace": "Belfast",
+      "seeding": "Seeding i trekningen bygger på rangeringen fra Nations League 2026/27 – derfor teller høstens kamper også for EM.",
+      "groupStage": {
+        "period": "Mars–november 2027",
+        "groups": 12,
+        "teamsPerGroup": "4 eller 5",
+        "matchFormat": "Alle møter alle, hjemme og borte",
+        "hostRule": "De fire vertsnasjonene spiller kvalik, men trekkes i hver sin gruppe."
+      },
+      "direct": [
+        { "label": "Gruppevinnere", "count": 12 },
+        { "label": "De 8 beste toerne", "count": 8 }
+      ],
+      "hostSlots": {
+        "count": 2,
+        "rule": "To plasser er reservert for de to best rangerte vertsnasjonene som ikke kvalifiserer seg direkte."
+      },
+      "playoffs": {
+        "period": "Mars 2028",
+        "note": "Datoene 23.–28. mars 2028 er fra Wikipedia, ikke bekreftet på UEFA.com.",
+        "participants": "De resterende toerne fra kvaliken og de best rangerte gruppevinnerne fra Nations League 2026/27 som ikke allerede har kvalifisert seg.",
+        "spots": "2–4, avhengig av hvor mange vertsplasser som brukes",
+        "scenarios": [
+          { "hostSlotsUsed": 2, "teams": 8, "spots": 2 },
+          { "hostSlotsUsed": 1, "teams": 12, "spots": 3 },
+          { "hostSlotsUsed": 0, "teams": 8, "spots": 4, "note": "Fire dobbeltoppgjør hjemme og borte" }
+        ]
+      }
+    },
+    "finals": {
+      "groups": 6,
+      "teamsPerGroup": 4,
+      "advance": "Topp to i hver gruppe + de fire beste treerne går til åttedelsfinale.",
+      "knockout": ["Åttedelsfinale", "Kvartfinale", "Semifinale", "Finale"]
+    }
+  },
+  "formatHistory": [
+    { "period": "1960–1976", "teams": 4, "format": "Kvalik som rene utslagskamper (fra 1968: grupper), deretter kvartfinaler hjemme og borte. Kun semifinaler og finale i vertslandet. Het «Europacupen for landslag» fram til 1968." },
+    { "period": "1980", "teams": 8, "format": "To grupper à fire. Gruppevinnerne til finale, toerne til bronsekamp." },
+    { "period": "1984–1992", "teams": 8, "format": "To grupper à fire, deretter semifinaler og finale. Bronsekampen fjernet etter 1980." },
+    { "period": "1996–2012", "teams": 16, "format": "Fire grupper à fire, deretter kvartfinaler. «Golden goal» avgjorde finalene i 1996 og 2000, «silver goal» ble brukt i 2004." },
+    { "period": "2016–2028", "teams": 24, "format": "Seks grupper à fire. Topp to + fire beste treere til åttedelsfinale. Fra 2020 ga Nations League en ekstra vei til sluttspillet via playoff." }
+  ],
+  "finalsHistory": [
+    { "year": 1960, "host": "Frankrike", "winner": "Sovjetunionen", "runnerUp": "Jugoslavia", "score": "2–1 e.e.o." },
+    { "year": 1964, "host": "Spania", "winner": "Spania", "runnerUp": "Sovjetunionen", "score": "2–1" },
+    { "year": 1968, "host": "Italia", "winner": "Italia", "runnerUp": "Jugoslavia", "score": "2–0 i omkamp (1–1 e.e.o.)" },
+    { "year": 1972, "host": "Belgia", "winner": "Vest-Tyskland", "runnerUp": "Sovjetunionen", "score": "3–0" },
+    { "year": 1976, "host": "Jugoslavia", "winner": "Tsjekkoslovakia", "runnerUp": "Vest-Tyskland", "score": "2–2 e.e.o., 5–3 på straffer" },
+    { "year": 1980, "host": "Italia", "winner": "Vest-Tyskland", "runnerUp": "Belgia", "score": "2–1" },
+    { "year": 1984, "host": "Frankrike", "winner": "Frankrike", "runnerUp": "Spania", "score": "2–0" },
+    { "year": 1988, "host": "Vest-Tyskland", "winner": "Nederland", "runnerUp": "Sovjetunionen", "score": "2–0" },
+    { "year": 1992, "host": "Sverige", "winner": "Danmark", "runnerUp": "Tyskland", "score": "2–0" },
+    { "year": 1996, "host": "England", "winner": "Tyskland", "runnerUp": "Tsjekkia", "score": "2–1 (golden goal)" },
+    { "year": 2000, "host": "Belgia og Nederland", "winner": "Frankrike", "runnerUp": "Italia", "score": "2–1 (golden goal)" },
+    { "year": 2004, "host": "Portugal", "winner": "Hellas", "runnerUp": "Portugal", "score": "1–0" },
+    { "year": 2008, "host": "Østerrike og Sveits", "winner": "Spania", "runnerUp": "Tyskland", "score": "1–0" },
+    { "year": 2012, "host": "Polen og Ukraina", "winner": "Spania", "runnerUp": "Italia", "score": "4–0" },
+    { "year": 2016, "host": "Frankrike", "winner": "Portugal", "runnerUp": "Frankrike", "score": "1–0 e.e.o." },
+    { "year": 2020, "host": "11 byer i Europa", "winner": "Italia", "runnerUp": "England", "score": "1–1 e.e.o., 3–2 på straffer", "note": "Spilt i 2021 på grunn av koronapandemien. Finalen på Wembley." },
+    { "year": 2024, "host": "Tyskland", "winner": "Spania", "runnerUp": "England", "score": "2–1" }
+  ],
+  "norway": [
+    { "year": 2000, "result": "Gruppespill", "detail": "Norges eneste EM-sluttspill. Slo Spania 1–0 i åpningskampen, men røk ut på innbyrdes oppgjør mot Jugoslavia etter likt antall poeng." }
+  ]
+}

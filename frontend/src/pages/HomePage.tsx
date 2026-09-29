@@ -42,6 +42,20 @@ export function HomePage() {
           </ul>
         </section>
       )}
+
+      <section className="section">
+        <h2>Mesterskapene</h2>
+        <div className="card-grid">
+          <Link to="/em" className="card link-card">
+            <strong>EM 2028</strong>
+            <span className="muted">Kvalik, sluttspillformat og alle EM-finaler siden 1960</span>
+          </Link>
+          <Link to="/vm" className="card link-card">
+            <strong>VM 2030</strong>
+            <span className="muted">Ny europeisk kvalik, sluttspillformat og alle VM-finaler siden 1930</span>
+          </Link>
+        </div>
+      </section>
     </>
   );
 }

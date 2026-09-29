@@ -660,3 +660,257 @@ tr.highlight td {
 .data-notes {
   padding-left: 1.2rem;
 }
+
+/* EM/VM pages */
+.link-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  color: var(--text);
+}
+
+.link-card strong {
+  color: var(--link);
+  font-size: 1.1rem;
+}
+
+.link-card:hover {
+  text-decoration: none;
+  border-color: var(--link);
+}
+
+.key-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr));
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.key-facts div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.8rem;
+}
+
+.key-facts dt {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.key-facts dd {
+  margin: 0.1rem 0 0;
+  font-weight: 600;
+}
+
+.notice {
+  background: var(--highlight);
+  border-radius: var(--radius);
+  padding: 0.6rem 0.8rem;
+}
+
+.fact-list {
+  padding-left: 1.2rem;
+}
+
+.fact-list li + li {
+  margin-top: 0.35rem;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.flow {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.flow-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.flow-box {
+  flex: 1 1 140px;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-left-width: 4px;
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.flow-box span {
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.flow-arrow {
+  text-align: center;
+  color: var(--muted);
+  font-size: 1.2rem;
+  line-height: 1.6;
+}
+
+.flow figcaption {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+/* Tones are paired with text labels and a legend, never colour alone. */
+.tone-qualified {
+  --tone: #1f8a4c;
+}
+
+.tone-playoff {
+  --tone: #d99a00;
+}
+
+.tone-host {
+  --tone: #0b4fb3;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tone-qualified {
+    --tone: #4cc27f;
+  }
+
+  .tone-playoff {
+    --tone: #f0bd3c;
+  }
+
+  .tone-host {
+    --tone: #8ab4ff;
+  }
+}
+
+.flow-box[class*="tone-"]:not(.tone-neutral) {
+  border-left-color: var(--tone);
+}
+
+.flow-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 3px;
+  margin-right: 0.35rem;
+  vertical-align: -0.1rem;
+  background: var(--tone);
+}
+
+.finals-format {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.mini-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: 0.4rem;
+}
+
+.mini-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 0.3rem 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.mini-group-name {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.mini-slot {
+  width: 22px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--tone, var(--border));
+}
+
+.knockout-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+}
+
+.knockout-steps li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+}
+
+.knockout-steps .champion {
+  justify-content: center;
+  background: var(--highlight);
+}
+
+.title-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.5rem;
+}
+
+.title-count {
+  display: inline-block;
+  min-width: 1.6rem;
+  text-align: center;
+  font-weight: 700;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.norway-history {
+  list-style: none;
+  padding: 0;
+}
+
+.norway-history li + li {
+  margin-top: 0.4rem;
+}
+
+.sources {
+  margin-top: 2rem;
+}
+
+.sources a {
+  word-break: break-all;
+}

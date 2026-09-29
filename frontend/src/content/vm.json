@@ -1,0 +1,105 @@
+{
+  "_meta": {
+    "description": "Innhold for VM-siden: VM 2030 (europeisk kvalik + sluttspill), formathistorikk og alle finaler.",
+    "generatedAt": "2026-09-29",
+    "verification": "VM 2030 og den nye UEFA-kvaliken fra UEFA.com og nyhetskilder (se sources). Detaljene i kvaliken er ikke ferdig vedtatt – UEFA har varslet mer informasjon sent i 2026 eller tidlig i 2027. Finaler 1930–2022 er godt dokumentert historikk. VM-finalen 2026 er verifisert mot Wikipedia; Norges VM 2026 er fra kampklar-seed-teams.json. Les over før publisering.",
+    "sources": [
+      "https://www.uefa.com/news-media/news/02a5-20aba2a6e7e9-38897428c81f-1000--new-concept-for-men-s-national-team-competitions-as-of-2028/",
+      "https://www.tsn.ca/soccer/fifa-world-cup/article/uefa-plans-to-revamp-qualifying-group-formats-for-the-2030-world-cup-and-euro-2032/",
+      "https://www.aljazeera.com/news/2026/7/19/when-is-the-next-fifa-world-cup-2030-hosts-dates-and-format",
+      "https://www.aljazeera.com/news/2026/7/13/gianni-infantino-64-teams-expansion-comments-fifa-2030-world-cup",
+      "https://en.wikipedia.org/wiki/2030_FIFA_World_Cup",
+      "https://en.wikipedia.org/wiki/2026_FIFA_World_Cup_final"
+    ]
+  },
+  "next": {
+    "name": "VM 2030",
+    "hosts": ["Spania", "Portugal", "Marokko"],
+    "centenaryHosts": {
+      "countries": ["Uruguay", "Argentina", "Paraguay"],
+      "note": "Én åpningskamp i hvert land 8.–9. juni 2030 for å markere at det første VM (Uruguay 1930) fyller 100 år."
+    },
+    "dates": { "start": "2030-06-08", "end": "2030-07-21" },
+    "finalVenue": null,
+    "finalVenueNote": "Finalearena er ikke bestemt.",
+    "stadiumCount": 20,
+    "teams": 48,
+    "teamsNote": "Et forslag om å utvide til 64 lag denne ene gangen er til vurdering hos FIFA, men ikke vedtatt. UEFA er imot.",
+    "uefaSlots": 16,
+    "uefaSlotsNote": "Forventet antall europeiske plasser (som i 2026). Ikke bekreftet av FIFA.",
+    "qualification": {
+      "status": "Formatet er vedtatt i hovedtrekk (UEFA, 20. mai 2026). Detaljer som antall direkteplasser per gruppe er ikke publisert ennå.",
+      "seeding": "Hvilken liga et land spiller i, avgjøres av Nations League 2028/29. Nations League får samtidig ny struktur: tre ligaer à 18 lag.",
+      "leagues": [
+        {
+          "name": "Liga 1",
+          "teams": 36,
+          "who": "Lagene fra Nations League liga A og B",
+          "format": "Tre grupper à 12 lag, trukket fra tre seedingpotter. Hvert lag spiller seks kamper (tre hjemme, tre borte) mot seks ulike motstandere, to fra hver pott – som ligafasen i Champions League."
+        },
+        {
+          "name": "Liga 2",
+          "teams": "18 eller 19",
+          "who": "De resterende lagene",
+          "format": "Tre grupper à seks (eller én gruppe à sju), alle møter alle hjemme og borte – som Nations League liga C."
+        }
+      ],
+      "direct": "De best rangerte lagene i hver av de tre Liga 1-gruppene kvalifiserer seg direkte. Antallet er ikke oppgitt.",
+      "playoffs": "Resten av plassene avgjøres i playoff mellom lag fra Liga 1 som ikke kvalifiserte seg direkte og de beste lagene fra Liga 2.",
+      "hosts": "Spania og Portugal er direkte kvalifisert som vertsnasjoner. UEFA sier at vertsnasjoner likevel skal delta i kvaliken, med et mål knyttet til plasseringen i neste Nations League."
+    },
+    "finals": {
+      "groups": 12,
+      "teamsPerGroup": 4,
+      "advance": "Topp to i hver gruppe + de åtte beste treerne går videre til sekstendelsfinale.",
+      "knockout": ["Sekstendelsfinale", "Åttedelsfinale", "Kvartfinale", "Semifinale", "Finale"],
+      "note": "Forutsatt 48 lag, samme format som i 2026. Ikke bekreftet for 2030."
+    },
+    "previousUefaQualification": {
+      "edition": "VM 2026",
+      "format": "12 grupper. Gruppevinnerne (12) kvalifiserte seg direkte. Toerne og de fire beste gruppevinnerne i Nations League som ikke hadde kvalifisert seg, spilte playoff om de siste fire plassene – 16 europeiske lag totalt."
+    }
+  },
+  "formatHistory": [
+    { "period": "1930", "teams": 13, "format": "Fire grupper, gruppevinnerne til semifinale. Kun inviterte lag, ingen kvalik." },
+    { "period": "1934–1938", "teams": 16, "format": "Rent utslagsturnering fra første kamp." },
+    { "period": "1950", "teams": 13, "format": "Innledende grupper og så en finalegruppe med fire lag – ingen egen finale. Uruguay–Brasil ble den avgjørende kampen." },
+    { "period": "1954–1970", "teams": 16, "format": "Fire grupper à fire, deretter kvartfinaler." },
+    { "period": "1974–1978", "teams": 16, "format": "To gruppespill etter hverandre. Vinnerne av andre gruppespill møttes i finalen." },
+    { "period": "1982", "teams": 24, "format": "Seks grupper, deretter et nytt gruppespill med fire grupper à tre, og semifinaler." },
+    { "period": "1986–1994", "teams": 24, "format": "Seks grupper à fire. Topp to + fire beste treere til åttedelsfinale." },
+    { "period": "1998–2022", "teams": 32, "format": "Åtte grupper à fire, topp to til åttedelsfinale." },
+    { "period": "2026–", "teams": 48, "format": "12 grupper à fire. Topp to + åtte beste treere til sekstendelsfinale. 104 kamper." }
+  ],
+  "finalsHistory": [
+    { "year": 1930, "host": "Uruguay", "winner": "Uruguay", "runnerUp": "Argentina", "score": "4–2" },
+    { "year": 1934, "host": "Italia", "winner": "Italia", "runnerUp": "Tsjekkoslovakia", "score": "2–1 e.e.o." },
+    { "year": 1938, "host": "Frankrike", "winner": "Italia", "runnerUp": "Ungarn", "score": "4–2" },
+    { "year": 1950, "host": "Brasil", "winner": "Uruguay", "runnerUp": "Brasil", "score": "2–1", "note": "Avgjørende kamp i finalegruppen, ikke en egentlig finale." },
+    { "year": 1954, "host": "Sveits", "winner": "Vest-Tyskland", "runnerUp": "Ungarn", "score": "3–2" },
+    { "year": 1958, "host": "Sverige", "winner": "Brasil", "runnerUp": "Sverige", "score": "5–2" },
+    { "year": 1962, "host": "Chile", "winner": "Brasil", "runnerUp": "Tsjekkoslovakia", "score": "3–1" },
+    { "year": 1966, "host": "England", "winner": "England", "runnerUp": "Vest-Tyskland", "score": "4–2 e.e.o." },
+    { "year": 1970, "host": "Mexico", "winner": "Brasil", "runnerUp": "Italia", "score": "4–1" },
+    { "year": 1974, "host": "Vest-Tyskland", "winner": "Vest-Tyskland", "runnerUp": "Nederland", "score": "2–1" },
+    { "year": 1978, "host": "Argentina", "winner": "Argentina", "runnerUp": "Nederland", "score": "3–1 e.e.o." },
+    { "year": 1982, "host": "Spania", "winner": "Italia", "runnerUp": "Vest-Tyskland", "score": "3–1" },
+    { "year": 1986, "host": "Mexico", "winner": "Argentina", "runnerUp": "Vest-Tyskland", "score": "3–2" },
+    { "year": 1990, "host": "Italia", "winner": "Vest-Tyskland", "runnerUp": "Argentina", "score": "1–0" },
+    { "year": 1994, "host": "USA", "winner": "Brasil", "runnerUp": "Italia", "score": "0–0 e.e.o., 3–2 på straffer" },
+    { "year": 1998, "host": "Frankrike", "winner": "Frankrike", "runnerUp": "Brasil", "score": "3–0" },
+    { "year": 2002, "host": "Sør-Korea og Japan", "winner": "Brasil", "runnerUp": "Tyskland", "score": "2–0" },
+    { "year": 2006, "host": "Tyskland", "winner": "Italia", "runnerUp": "Frankrike", "score": "1–1 e.e.o., 5–3 på straffer" },
+    { "year": 2010, "host": "Sør-Afrika", "winner": "Spania", "runnerUp": "Nederland", "score": "1–0 e.e.o." },
+    { "year": 2014, "host": "Brasil", "winner": "Tyskland", "runnerUp": "Argentina", "score": "1–0 e.e.o." },
+    { "year": 2018, "host": "Russland", "winner": "Frankrike", "runnerUp": "Kroatia", "score": "4–2" },
+    { "year": 2022, "host": "Qatar", "winner": "Argentina", "runnerUp": "Frankrike", "score": "3–3 e.e.o., 4–2 på straffer" },
+    { "year": 2026, "host": "USA, Canada og Mexico", "winner": "Spania", "runnerUp": "Argentina", "score": "1–0 e.e.o.", "note": "Første VM med 48 lag. Finalen på MetLife Stadium, New Jersey." }
+  ],
+  "norway": [
+    { "year": 1938, "result": "Åttedelsfinale", "detail": "Tapte 1–2 e.e.o. mot Italia, som vant hele VM." },
+    { "year": 1994, "result": "Gruppespill", "detail": "Fire poeng, men ute på færre scorede mål i en gruppe der alle fire lag fikk fire poeng." },
+    { "year": 1998, "result": "Åttedelsfinale", "detail": "Slo Brasil 2–1 i gruppespillet. Tapte 0–1 mot Italia i åttedelsfinalen." },
+    { "year": 2026, "result": "Kvartfinale", "detail": "Norges beste VM noensinne. Slo Elfenbenskysten og Brasil, tapte 1–2 e.e.o. mot England." }
+  ]
+}
