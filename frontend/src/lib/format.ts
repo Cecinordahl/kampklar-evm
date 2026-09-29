@@ -54,3 +54,19 @@ export function formatIsoDate(iso: string): string {
   const date = new Date(iso.length === 7 ? `${iso}-01` : iso);
   return (iso.length === 7 ? isoMonthFormat : isoDateFormat).format(date);
 }
+
+const osloDay = new Intl.DateTimeFormat("en-CA", { timeZone: TIME_ZONE });
+
+/** Whole calendar days between two instants, counted in Norwegian time. */
+export function daysBetween(earlier: Date, later: Date): number {
+  const day = (d: Date) => Date.parse(osloDay.format(d));
+  return Math.round((day(later) - day(earlier)) / 86_400_000);
+}
+
+/** "i dag", "i går", "for 3 dager siden". */
+export function formatDaysAgo(date: Date, now = new Date()): string {
+  const days = daysBetween(date, now);
+  if (days <= 0) return "i dag";
+  if (days === 1) return "i går";
+  return `for ${days} dager siden`;
+}

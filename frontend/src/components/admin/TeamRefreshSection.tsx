@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { refreshTeam, type TeamRefreshResult } from "../../lib/adminApi";
+import { daysBetween, formatDate, formatDaysAgo, formatTime } from "../../lib/format";
 import { useTeams } from "../../lib/useFirestore";
 import { LongTaskOverlay } from "./LongTaskOverlay";
+
+// A refresh costs real money; squads rarely change within a week outside squad announcements.
+const RECENT_DAYS = 7;
 
 /** "Oppdater lagdata": slow (1-3 min), so a waiting screen covers the page while it runs. */
 export function TeamRefreshSection() {
@@ -10,6 +14,8 @@ export function TeamRefreshSection() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<TeamRefreshResult | null>(null);
+  const refreshedAt = teams.data.get(teamId)?.refreshedAt ?? null;
+  const recentlyRefreshed = refreshedAt !== null && daysBetween(refreshedAt, new Date()) < RECENT_DAYS;
 
   async function handleRefresh() {
     if (!teamId) return;
@@ -46,14 +52,24 @@ export function TeamRefreshSection() {
             {[...teams.data.values()].map((t) => (
               <option key={t.id} value={t.id}>
                 {t.name}
+                {t.refreshedAt && ` · oppdatert ${formatDaysAgo(t.refreshedAt)}`}
               </option>
             ))}
           </select>
         </label>
         <button type="button" className="button" onClick={handleRefresh} disabled={!teamId || refreshing}>
-          {refreshing ? "Henter… (1–3 min)" : "Oppdater lagdata"}
+          {refreshing ? "Henter… (1–3 min)" : recentlyRefreshed ? "Oppdater likevel" : "Oppdater lagdata"}
         </button>
       </div>
+
+      {teamId && !refreshing && !result && (
+        <p className={recentlyRefreshed ? "notice small" : "muted small"}>
+          {refreshedAt
+            ? `Sist oppdatert ${formatDaysAgo(refreshedAt)} (${formatDate(refreshedAt)} kl. ${formatTime(refreshedAt)}).`
+            : "Aldri oppdatert."}
+          {recentlyRefreshed && " Hver oppdatering koster API-kreditt – trenger du den nå?"}
+        </p>
+      )}
 
       {refreshing && <LongTaskOverlay title={`Oppdaterer lagdata for ${teams.data.get(teamId)?.name ?? teamId}`} />}
 
