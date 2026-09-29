@@ -597,3 +597,33 @@ tr.highlight td {
   background: var(--accent);
   transition: width 1s linear;
 }
+
+.admin-ai {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.admin-ai p {
+  margin: 0;
+}
+
+.admin-ai-tag {
+  margin-left: 0.5rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: var(--highlight);
+  color: var(--text);
+  font-size: 0.75rem;
+}
+
+.admin-ai-note {
+  background: var(--highlight);
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+}
+
+.admin-ai-note p,
+.admin-ai-note ul {
+  margin: 0.25rem 0;
+}

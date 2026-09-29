@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 /** The Claude API call failed or returned something unusable - nothing was written. */
 @ResponseStatus(HttpStatus.BAD_GATEWAY)
-public class TeamResearchException extends RuntimeException {
+public class ResearchException extends RuntimeException {
 
-    public TeamResearchException(String message) {
+    public ResearchException(String message) {
         super(message);
     }
 
-    public TeamResearchException(String message, Throwable cause) {
+    public ResearchException(String message, Throwable cause) {
         super(message, cause);
     }
 }

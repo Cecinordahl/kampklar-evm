@@ -61,3 +61,19 @@ export interface TeamRefreshResult {
 export function refreshTeam(teamId: string): Promise<TeamRefreshResult> {
   return adminFetch(`/admin/teams/${teamId}/refresh`, { method: "POST" });
 }
+
+/** A researched result with players mapped to our ids. Not saved - it prefills the match form. */
+export interface ResultSuggestion {
+  matchId: string;
+  homeGoals: number;
+  awayGoals: number;
+  homeLineup: string[];
+  awayLineup: string[];
+  homeScorerIds: string[];
+  awayScorerIds: string[];
+  warnings: string[];
+}
+
+export function suggestResults(groupId: string): Promise<ResultSuggestion[]> {
+  return adminFetch(`/admin/groups/${groupId}/result-suggestions`, { method: "POST" });
+}

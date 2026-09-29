@@ -1,15 +1,12 @@
-import { useBackendWarmup } from "../../lib/useBackendWarmup";
+import type { BackendStatus } from "../../lib/useBackendWarmup";
+import { Loading } from "../Status";
 
 /** Typical cold start on Render's free tier; the bar fills against this and stops just short. */
 const EXPECTED_WAKE_SECONDS = 60;
-/** Don't flash the banner when the backend is already awake and answers at once. */
+/** An awake backend answers well within this; don't flash the bar for it. */
 const SHOW_AFTER_SECONDS = 2;
 
-export function BackendStatusBanner() {
-  const { status, elapsedSeconds } = useBackendWarmup();
-
-  if (status === "ready") return null;
-
+export function BackendStatusBanner({ status, elapsedSeconds }: { status: BackendStatus; elapsedSeconds: number }) {
   if (status === "failed") {
     return (
       <p className="error backend-status" role="alert">
@@ -18,7 +15,7 @@ export function BackendStatusBanner() {
     );
   }
 
-  if (elapsedSeconds < SHOW_AFTER_SECONDS) return null;
+  if (elapsedSeconds < SHOW_AFTER_SECONDS) return <Loading />;
 
   const progress = Math.min(elapsedSeconds / EXPECTED_WAKE_SECONDS, 0.95);
   return (

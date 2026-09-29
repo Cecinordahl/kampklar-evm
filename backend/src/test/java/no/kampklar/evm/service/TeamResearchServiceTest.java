@@ -9,7 +9,7 @@ class TeamResearchServiceTest {
 
     @Test
     void refusesToResearchWithoutAnApiKeyInsteadOfCallingTheApi() {
-        TeamResearchService service = new TeamResearchService("");
+        TeamResearchService service = new TeamResearchService(new ClaudeResearchClient(""));
 
         assertThatThrownBy(() -> service.research("norway", "Norge"))
                 .isInstanceOf(ResearchUnavailableException.class)

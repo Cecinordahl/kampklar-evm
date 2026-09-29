@@ -1,4 +1,5 @@
 import { signOutAdmin, useAdminAuth } from "../lib/auth";
+import { useBackendWarmup } from "../lib/useBackendWarmup";
 import { Loading } from "../components/Status";
 import { BackendStatusBanner } from "../components/admin/BackendStatusBanner";
 import { LoginForm } from "../components/admin/LoginForm";
@@ -10,6 +11,12 @@ export function AdminPage() {
 
   if (loading) return <Loading />;
   if (!user) return <LoginForm />;
+  return <AdminView email={user.email} />;
+}
+
+/** Nothing that writes is shown until the backend has answered, so no save can hang on a cold start. */
+function AdminView({ email }: { email: string | null }) {
+  const backend = useBackendWarmup();
 
   return (
     <>
@@ -19,11 +26,16 @@ export function AdminPage() {
           Logg ut
         </button>
       </div>
-      <p className="muted small">Innlogget som {user.email}</p>
-      <BackendStatusBanner />
+      <p className="muted small">Innlogget som {email}</p>
 
-      <MatchEntrySection />
-      <TeamRefreshSection />
+      {backend.status === "ready" ? (
+        <>
+          <MatchEntrySection />
+          <TeamRefreshSection />
+        </>
+      ) : (
+        <BackendStatusBanner status={backend.status} elapsedSeconds={backend.elapsedSeconds} />
+      )}
     </>
   );
 }
