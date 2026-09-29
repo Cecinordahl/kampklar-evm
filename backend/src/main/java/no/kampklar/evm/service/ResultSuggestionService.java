@@ -38,7 +38,8 @@ public class ResultSuggestionService {
         this.resultResearchService = resultResearchService;
     }
 
-    public List<ResultSuggestion> suggest(String groupId) {
+    /** {@code matchIds} null or empty: every kicked-off match in the group. */
+    public List<ResultSuggestion> suggest(String groupId, List<String> matchIds) {
         try {
             DocumentSnapshot groupDoc = firestore.collection(GROUPS).document(groupId).get().get();
             if (!groupDoc.exists()) {
@@ -51,6 +52,7 @@ public class ResultSuggestionService {
                     .getDocuments().stream()
                     .map(FirestoreDocuments::toMatch)
                     .filter(m -> m.kickoff().isBefore(now))
+                    .filter(m -> matchIds == null || matchIds.isEmpty() || matchIds.contains(m.id()))
                     .toList();
             if (kickedOff.isEmpty()) {
                 return List.of(); // nothing played yet - don't pay for a research call

@@ -74,6 +74,10 @@ export interface ResultSuggestion {
   warnings: string[];
 }
 
-export function suggestResults(groupId: string): Promise<ResultSuggestion[]> {
-  return adminFetch(`/admin/groups/${groupId}/result-suggestions`, { method: "POST" });
+/** Researches only {@code matchIds} (each research call is paid, so ask only for what is needed). */
+export function suggestResults(groupId: string, matchIds: string[]): Promise<ResultSuggestion[]> {
+  return adminFetch(`/admin/groups/${groupId}/result-suggestions`, {
+    method: "POST",
+    body: JSON.stringify({ matchIds }),
+  });
 }

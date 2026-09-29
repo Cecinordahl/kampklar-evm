@@ -8,8 +8,8 @@ import type { Match, MatchStatus, Player, Team } from "../../types/firestore";
 
 /**
  * Admin picks a group, then an already-seeded fixture, then enters or corrects its result.
- * "Hent resultater med AI" researches the group's played matches; each suggestion prefills
- * the match form for review, or all of them can be saved at once.
+ * "Hent resultater med AI" researches the chosen played matches (by default those still without
+ * a result); each suggestion prefills the match form for review, or all can be saved at once.
  */
 export function MatchEntrySection() {
   const groups = useGroups();
@@ -47,6 +47,7 @@ export function MatchEntrySection() {
           key={groupId}
           groupId={groupId}
           matches={matches.data}
+          teams={teams.data}
           suggestions={suggestions}
           onSuggestions={setSuggestions}
         />
@@ -92,31 +93,58 @@ export function MatchEntrySection() {
   );
 }
 
-/** Fetches suggestions for the group (slow, paid) and can save every suggestion in one go. */
+/**
+ * Which played matches to research: "missing" (no result yet - the default, since researching
+ * a saved result again is wasted credit), "all", "team:<id>" or "match:<id>".
+ */
+function matchesInScope(scope: string, played: Match[]): Match[] {
+  if (scope === "missing") return played.filter((m) => m.status !== "FINISHED");
+  if (scope.startsWith("team:")) {
+    const teamId = scope.slice("team:".length);
+    return played.filter((m) => m.homeTeamId === teamId || m.awayTeamId === teamId);
+  }
+  if (scope.startsWith("match:")) return played.filter((m) => m.id === scope.slice("match:".length));
+  return played;
+}
+
+/** Fetches suggestions for the chosen matches (slow, paid) and can save every suggestion in one go. */
 function AiResults({
   groupId,
   matches,
+  teams,
   suggestions,
   onSuggestions,
 }: {
   groupId: string;
   matches: Match[];
+  teams: Map<string, Team>;
   suggestions: Map<string, ResultSuggestion>;
   onSuggestions: (suggestions: Map<string, ResultSuggestion>) => void;
 }) {
+  const [scope, setScope] = useState("missing");
   const [fetching, setFetching] = useState(false);
   const [fetched, setFetched] = useState(false);
   const [savingAll, setSavingAll] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const now = new Date();
+  const played = matches.filter((m) => m.kickoff < now);
+  const inScope = matchesInScope(scope, played);
+  const teamIds = [...new Set(played.flatMap((m) => [m.homeTeamId, m.awayTeamId]))];
+  const teamName = (id: string) => teams.get(id)?.name ?? id;
+
   async function handleFetch() {
     setFetching(true);
     setError(null);
     setMessage(null);
     try {
-      const result = await suggestResults(groupId);
-      onSuggestions(new Map(result.map((s) => [s.matchId, s])));
+      const result = await suggestResults(
+        groupId,
+        inScope.map((m) => m.id),
+      );
+      // Merged, so fetching one country after another keeps the earlier suggestions.
+      onSuggestions(new Map([...suggestions, ...result.map((s) => [s.matchId, s] as const)]));
       setFetched(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Ukjent feil.");
@@ -152,8 +180,43 @@ function AiResults({
   return (
     <div className="admin-ai">
       <div className="admin-score-row">
-        <button type="button" className="button button-secondary" onClick={handleFetch} disabled={fetching || savingAll}>
-          {fetching ? "Henter… (1–3 min)" : "Hent resultater med AI"}
+        <label className="admin-field">
+          Hvilke kamper
+          <select value={scope} onChange={(e) => setScope(e.target.value)} disabled={fetching || savingAll}>
+            <option value="missing">Spilte kamper uten resultat</option>
+            <option value="all">Alle spilte kamper</option>
+            {teamIds.length > 0 && (
+              <optgroup label="Ett lag">
+                {teamIds.map((id) => (
+                  <option key={id} value={`team:${id}`}>
+                    {teamName(id)}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+            {played.length > 0 && (
+              <optgroup label="Én kamp">
+                {played.map((m) => (
+                  <option key={m.id} value={`match:${m.id}`}>
+                    {teamName(m.homeTeamId)} – {teamName(m.awayTeamId)} ({formatDate(m.kickoff)})
+                    {m.status === "FINISHED" ? " ✓" : ""}
+                  </option>
+                ))}
+              </optgroup>
+            )}
+          </select>
+        </label>
+        <button
+          type="button"
+          className="button button-secondary"
+          onClick={handleFetch}
+          disabled={fetching || savingAll || inScope.length === 0}
+        >
+          {fetching
+            ? "Henter… (1–3 min)"
+            : inScope.length === 0
+              ? "Ingen kamper å hente"
+              : `Hent ${inScope.length === 1 ? "1 kamp" : `${inScope.length} kamper`} med AI`}
         </button>
         {suggestions.size > 0 && (
           <button type="button" className="button" onClick={handleSaveAll} disabled={fetching || savingAll}>
@@ -162,12 +225,12 @@ function AiResults({
         )}
       </div>
       <p className="muted small">
-        Søker opp resultat, lagoppstilling og målscorere for kampene som er spilt. Ingenting lagres før du trykker
-        Lagre.
+        Søker opp resultat, lagoppstilling og målscorere for de valgte kampene. Hver henting koster API-kreditt, så
+        velg bare det du trenger. Ingenting lagres før du trykker Lagre.
       </p>
       {fetching && <LongTaskOverlay title="Henter resultater med AI" />}
       {fetched && !fetching && suggestions.size === 0 && (
-        <p className="muted small">Fant ingen ferdigspilte kamper i gruppen.</p>
+        <p className="muted small">Fant ingen ferdigspilte kamper blant de valgte.</p>
       )}
       {suggestions.size > 0 && warningCount > 0 && (
         <p className="small">
