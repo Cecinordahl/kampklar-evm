@@ -3,6 +3,7 @@ import { saveMatch, suggestResults, type MatchSaveRequest, type ResultSuggestion
 import { formatDate, formatTime } from "../../lib/format";
 import { useGroupMatches, useGroups, useSquad, useTeams, type Live } from "../../lib/useFirestore";
 import { LoadError, Loading } from "../Status";
+import { LongTaskOverlay } from "./LongTaskOverlay";
 import type { Match, MatchStatus, Player, Team } from "../../types/firestore";
 
 /**
@@ -16,7 +17,6 @@ export function MatchEntrySection() {
   const [groupId, setGroupId] = useState("");
   const matches = useGroupMatches(groupId || undefined);
   const [selectedMatchId, setSelectedMatchId] = useState<string | null>(null);
-  const selectedMatch = matches.data.find((m) => m.id === selectedMatchId) ?? null;
   const [suggestions, setSuggestions] = useState<Map<string, ResultSuggestion>>(new Map());
 
   return (
@@ -59,32 +59,35 @@ export function MatchEntrySection() {
           <LoadError error={matches.error} />
         ) : (
           <ul className="admin-match-list">
-            {matches.data.map((m) => (
-              <li key={m.id}>
-                <button
-                  type="button"
-                  className={`admin-match-pick${m.id === selectedMatchId ? " is-selected" : ""}`}
-                  onClick={() => setSelectedMatchId(m.id)}
-                >
-                  {formatDate(m.kickoff)} {formatTime(m.kickoff)} ·{" "}
-                  {teams.data.get(m.homeTeamId)?.name ?? m.homeTeamId} –{" "}
-                  {teams.data.get(m.awayTeamId)?.name ?? m.awayTeamId}
-                  {m.status === "FINISHED" ? ` (${m.homeGoals}–${m.awayGoals})` : ""}
-                  {suggestions.has(m.id) && <span className="admin-ai-tag">AI-forslag</span>}
-                </button>
-              </li>
-            ))}
+            {matches.data.map((m) => {
+              const suggestion = suggestions.get(m.id);
+              return (
+                <li key={m.id}>
+                  <button
+                    type="button"
+                    className={`admin-match-pick${m.id === selectedMatchId ? " is-selected" : ""}`}
+                    onClick={() => setSelectedMatchId(m.id === selectedMatchId ? null : m.id)}
+                  >
+                    {formatDate(m.kickoff)} {formatTime(m.kickoff)} ·{" "}
+                    {teams.data.get(m.homeTeamId)?.name ?? m.homeTeamId} –{" "}
+                    {teams.data.get(m.awayTeamId)?.name ?? m.awayTeamId}
+                    {m.status === "FINISHED" ? ` (${m.homeGoals}–${m.awayGoals})` : ""}
+                    {suggestion && (
+                      <span className="admin-ai-tag">
+                        AI: {suggestion.homeGoals}–{suggestion.awayGoals}
+                        {suggestion.warnings.length > 0 ? " ⚠" : ""}
+                      </span>
+                    )}
+                  </button>
+                  {/* Opens right under the match, so it is visible without scrolling past the list. */}
+                  {m.id === selectedMatchId && (
+                    <MatchForm key={`${m.id}-${!!suggestion}`} match={m} suggestion={suggestion} teams={teams.data} />
+                  )}
+                </li>
+              );
+            })}
           </ul>
         ))}
-
-      {selectedMatch && (
-        <MatchForm
-          key={`${selectedMatch.id}-${suggestions.has(selectedMatch.id)}`}
-          match={selectedMatch}
-          suggestion={suggestions.get(selectedMatch.id)}
-          teams={teams.data}
-        />
-      )}
     </section>
   );
 }
@@ -162,6 +165,7 @@ function AiResults({
         Søker opp resultat, lagoppstilling og målscorere for kampene som er spilt. Ingenting lagres før du trykker
         Lagre.
       </p>
+      {fetching && <LongTaskOverlay title="Henter resultater med AI" />}
       {fetched && !fetching && suggestions.size === 0 && (
         <p className="muted small">Fant ingen ferdigspilte kamper i gruppen.</p>
       )}

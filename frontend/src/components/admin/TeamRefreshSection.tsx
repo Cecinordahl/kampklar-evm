@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { refreshTeam, type TeamRefreshResult } from "../../lib/adminApi";
 import { useTeams } from "../../lib/useFirestore";
+import { LongTaskOverlay } from "./LongTaskOverlay";
 
-/** "Oppdater lagdata": slow (1-3 min), so the button stays disabled and says so while it runs. */
+/** "Oppdater lagdata": slow (1-3 min), so a waiting screen covers the page while it runs. */
 export function TeamRefreshSection() {
   const teams = useTeams();
   const [teamId, setTeamId] = useState("");
@@ -53,6 +54,8 @@ export function TeamRefreshSection() {
           {refreshing ? "Henter… (1–3 min)" : "Oppdater lagdata"}
         </button>
       </div>
+
+      {refreshing && <LongTaskOverlay title={`Oppdaterer lagdata for ${teams.data.get(teamId)?.name ?? teamId}`} />}
 
       {error && (
         <p className="error" role="alert">
