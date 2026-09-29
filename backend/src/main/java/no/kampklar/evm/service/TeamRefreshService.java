@@ -55,10 +55,12 @@ public class TeamRefreshService {
                     .toList();
             SquadMerge.Plan plan = SquadMerge.plan(teamId, existing, research.squad());
 
+            Coach coach = research.coach().toCoach();
             WriteBatch batch = firestore.batch();
             batch.update(teamDoc.getReference(), Map.of(
-                    "coach", FirestoreDocuments.fromCoach(research.coach()),
-                    "tournamentHistory", FirestoreDocuments.fromTournamentHistory(research.tournamentHistory()),
+                    "coach", FirestoreDocuments.fromCoach(coach),
+                    "tournamentHistory", FirestoreDocuments.fromTournamentHistory(
+                            research.tournamentHistory().stream().map(TeamResearch.Tournament::toEntry).toList()),
                     "refreshedAt", FieldValue.serverTimestamp()));
             for (Player player : plan.added()) {
                 batch.create(firestore.collection(PLAYERS).document(player.id()), FirestoreDocuments.fromPlayer(player));
@@ -68,14 +70,16 @@ public class TeamRefreshService {
                         "name", player.name(),
                         "position", player.position(),
                         "club", player.club(),
-                        "inSquad", true));
+                        "inSquad", true,
+                        "squadStatus", "confirmed"));
             }
             for (Player player : plan.leftSquad()) {
-                batch.update(firestore.collection(PLAYERS).document(player.id()), "inSquad", false);
+                batch.update(firestore.collection(PLAYERS).document(player.id()),
+                        "inSquad", false, "squadStatus", FieldValue.delete());
             }
             batch.commit().get();
 
-            return new Result(research.coach(), research.tournamentHistory().size(),
+            return new Result(coach, research.tournamentHistory().size(),
                     plan.added(), plan.updated(), plan.leftSquad());
         } catch (ExecutionException e) {
             throw new IllegalStateException("Refreshing team " + teamId + " failed", e.getCause());

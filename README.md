@@ -19,6 +19,7 @@ UEFA Nations League 2026/27. Live at https://kampklar-evm.vercel.app.
 ```
 cd backend
 cp .env.example .env   # fill in FIREBASE_SERVICE_ACCOUNT_JSON, ADMIN_UID, ANTHROPIC_API_KEY
+set -a; source .env; set +a   # Spring does not read .env itself
 ./mvnw spring-boot:run
 ```
 `ANTHROPIC_API_KEY` is the one paid dependency in this stack (powers the "Oppdater lagdata"
@@ -38,12 +39,19 @@ firebase use --add                               # pick the Firebase project
 firebase deploy --only firestore:rules           # public read-only, no client writes
 
 cd backend
+set -a; source .env; set +a   # if not already loaded in this shell
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=seed
 ```
 The seed loads competitions, groups, teams and all fixtures from
 `backend/src/main/resources/seed/unl-2026-27.json`, then exits. It is safe to re-run: it never
 overwrites existing matches, results, standings or team data. Results are entered through the
 admin endpoint, not the seed file.
+
+The same run also loads squads, coaches and tournament history for Norge, Spania and Frankrike
+from `seed/kampklar-seed-teams.json`. Re-running never creates duplicate players and never
+touches caps/goals of existing players (the file is a pre-Nations League baseline; match entry
+owns them after that), but it does reset club, notes, coach, history and "sist oppdatert" to
+the file's values.
 
 ### Admin account (once per Firebase project)
 1. Firebase console > Authentication > Sign-in method: enable **Email/Password**.

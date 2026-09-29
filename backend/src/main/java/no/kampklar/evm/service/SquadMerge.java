@@ -46,10 +46,10 @@ final class SquadMerge {
             Player current = existingByName.get(key);
             if (current == null) {
                 String id = uniqueId(teamId + "-" + key, takenIds);
-                added.add(new Player(id, teamId, researched.name(), researched.position(), researched.club(),
+                added.add(Player.researched(id, teamId, researched.name(), researched.position(), researched.club(),
                         researched.caps(), researched.goals(), true));
             } else {
-                updated.add(new Player(current.id(), teamId, researched.name(), researched.position(),
+                updated.add(Player.researched(current.id(), teamId, researched.name(), researched.position(),
                         researched.club(), current.caps(), current.goals(), true));
             }
         }
@@ -57,7 +57,7 @@ final class SquadMerge {
         List<Player> leftSquad = existing.stream()
                 .filter(Player::inSquad)
                 .filter(p -> !seenNames.contains(normalize(p.name())))
-                .map(p -> new Player(p.id(), p.teamId(), p.name(), p.position(), p.club(), p.caps(), p.goals(), false))
+                .map(p -> Player.researched(p.id(), p.teamId(), p.name(), p.position(), p.club(), p.caps(), p.goals(), false))
                 .toList();
 
         return new Plan(added, updated, leftSquad);
@@ -73,7 +73,7 @@ final class SquadMerge {
         return ascii.replaceAll("[^a-z0-9]+", "-").replaceAll("(^-|-$)", "");
     }
 
-    private static String uniqueId(String base, Set<String> takenIds) {
+    static String uniqueId(String base, Set<String> takenIds) {
         String id = base;
         for (int n = 2; takenIds.contains(id); n++) {
             id = base + "-" + n;

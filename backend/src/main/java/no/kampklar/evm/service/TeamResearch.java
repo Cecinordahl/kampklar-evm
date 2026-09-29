@@ -8,16 +8,31 @@ import java.util.List;
 
 /**
  * What Claude returns for "Oppdater lagdata". The record shapes double as the JSON schema the
- * API constrains its answer to, so the descriptions below are part of the prompt.
+ * API constrains its answer to, so the descriptions below are part of the prompt. They are kept
+ * separate from the domain model so adding a model field does not change what research asks for.
  */
 public record TeamResearch(
         @JsonPropertyDescription("The current head coach")
-        Coach coach,
+        ResearchedCoach coach,
         @JsonPropertyDescription("Every player in the most recent official squad announcement")
         List<Player> squad,
         @JsonPropertyDescription("One entry per EURO and World Cup final tournament since 2000, including ones the team did not qualify for")
-        List<TournamentHistoryEntry> tournamentHistory
+        List<Tournament> tournamentHistory
 ) {
+
+    public record ResearchedCoach(String name, String nationality) {
+
+        Coach toCoach() {
+            return Coach.of(name, nationality);
+        }
+    }
+
+    public record Tournament(String tournament, int year, String result) {
+
+        TournamentHistoryEntry toEntry() {
+            return new TournamentHistoryEntry(tournament, year, result, null);
+        }
+    }
 
     public record Player(
             @JsonPropertyDescription("Full name as commonly written, with original diacritics")

@@ -125,3 +125,12 @@ export function useSquad(teamId: string | undefined): Live<Player[]> {
     toPlayer,
   );
 }
+
+/** Named as considered by the coach, or withdrawn injured - not in the squad itself. */
+export function useConsideredPlayers(teamId: string | undefined): Live<Player[]> {
+  return useLiveQuery(
+    teamId ? `considered-${teamId}` : null,
+    () => query(collection(db, "players"), where("teamId", "==", teamId), where("squadStatus", "==", "considered")),
+    toPlayer,
+  );
+}

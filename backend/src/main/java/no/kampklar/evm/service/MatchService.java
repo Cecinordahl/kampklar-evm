@@ -13,6 +13,7 @@ import no.kampklar.evm.model.Standing;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -85,10 +86,19 @@ public class MatchService {
                 "standingsUpdatedAt", FieldValue.serverTimestamp()));
         statChanges.forEach((playerId, change) -> {
             // A player removed from a lineup may since have been deleted - nothing to reverse then.
-            if (players.containsKey(playerId)) {
-                tx.update(firestore.collection(PLAYERS).document(playerId), Map.of(
-                        "caps", FieldValue.increment(change.caps()),
-                        "goals", FieldValue.increment(change.goals())));
+            Player player = players.get(playerId);
+            if (player != null) {
+                // Null means unknown: incrementing it would turn "unknown" into a made-up total.
+                Map<String, Object> increments = new HashMap<>();
+                if (player.caps() != null && change.caps() != 0) {
+                    increments.put("caps", FieldValue.increment(change.caps()));
+                }
+                if (player.goals() != null && change.goals() != 0) {
+                    increments.put("goals", FieldValue.increment(change.goals()));
+                }
+                if (!increments.isEmpty()) {
+                    tx.update(firestore.collection(PLAYERS).document(playerId), increments);
+                }
             }
         });
         return standings;

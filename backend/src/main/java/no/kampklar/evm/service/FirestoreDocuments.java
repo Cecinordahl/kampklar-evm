@@ -3,11 +3,13 @@ package no.kampklar.evm.service;
 import com.google.cloud.Timestamp;
 import com.google.cloud.firestore.DocumentSnapshot;
 import no.kampklar.evm.model.Coach;
+import no.kampklar.evm.model.CoachRecord;
 import no.kampklar.evm.model.Group;
 import no.kampklar.evm.model.Match;
 import no.kampklar.evm.model.MatchStatus;
 import no.kampklar.evm.model.Player;
 import no.kampklar.evm.model.Standing;
+import no.kampklar.evm.model.Team;
 import no.kampklar.evm.model.TournamentHistoryEntry;
 
 import java.util.HashMap;
@@ -47,20 +49,39 @@ final class FirestoreDocuments {
                 doc.getString("name"),
                 doc.getString("position"),
                 doc.getString("club"),
-                intOrZero(doc.getLong("caps")),
-                intOrZero(doc.getLong("goals")),
-                !Boolean.FALSE.equals(doc.getBoolean("inSquad")));
+                doc.getString("birthDate"),
+                intOrNull(doc.getLong("birthYear")),
+                Boolean.TRUE.equals(doc.getBoolean("birthYearUnverified")),
+                intOrNull(doc.getLong("caps")),
+                intOrNull(doc.getLong("goals")),
+                !Boolean.FALSE.equals(doc.getBoolean("inSquad")),
+                doc.getString("squadStatus"),
+                Boolean.TRUE.equals(doc.getBoolean("captain")),
+                doc.getString("note"));
     }
 
+    /** Every field; nulls are stored as nulls so "unknown" survives the round trip. */
     static Map<String, Object> fromPlayer(Player player) {
+        Map<String, Object> fields = fromPlayerExceptStats(player);
+        fields.put("caps", player.caps());
+        fields.put("goals", player.goals());
+        return fields;
+    }
+
+    /** Everything but caps/goals, which match entry owns once a player exists. */
+    static Map<String, Object> fromPlayerExceptStats(Player player) {
         Map<String, Object> fields = new HashMap<>();
         fields.put("teamId", player.teamId());
         fields.put("name", player.name());
         fields.put("position", player.position());
         fields.put("club", player.club());
-        fields.put("caps", player.caps());
-        fields.put("goals", player.goals());
+        fields.put("birthDate", player.birthDate());
+        fields.put("birthYear", player.birthYear());
+        fields.put("birthYearUnverified", player.birthYearUnverified());
         fields.put("inSquad", player.inSquad());
+        fields.put("squadStatus", player.squadStatus());
+        fields.put("captain", player.captain());
+        fields.put("note", player.note());
         return fields;
     }
 
@@ -68,13 +89,48 @@ final class FirestoreDocuments {
         Map<String, Object> fields = new HashMap<>();
         fields.put("name", coach.name());
         fields.put("nationality", coach.nationality());
+        fields.put("birthDate", coach.birthDate());
+        fields.put("appointedDate", coach.appointedDate());
+        fields.put("bio", coach.bio());
+        CoachRecord r = coach.record();
+        fields.put("record", r == null ? null : Map.of(
+                "matches", r.matches(),
+                "wins", r.wins(),
+                "draws", r.draws(),
+                "losses", r.losses(),
+                "goalsFor", r.goalsFor(),
+                "goalsAgainst", r.goalsAgainst(),
+                "asOf", r.asOf()));
         return fields;
     }
 
     static List<Map<String, Object>> fromTournamentHistory(List<TournamentHistoryEntry> entries) {
         return entries.stream()
-                .map(e -> Map.<String, Object>of("tournament", e.tournament(), "year", e.year(), "result", e.result()))
+                .map(e -> {
+                    Map<String, Object> fields = new HashMap<>();
+                    fields.put("tournament", e.tournament());
+                    fields.put("year", e.year());
+                    fields.put("result", e.result());
+                    fields.put("detail", e.detail());
+                    return fields;
+                })
                 .toList();
+    }
+
+    /** Team-level fields only; the id is the document id. */
+    static Map<String, Object> fromTeam(Team team) {
+        Map<String, Object> fields = new HashMap<>();
+        fields.put("name", team.name());
+        fields.put("fifaCode", team.fifaCode());
+        fields.put("flagCountryCode", team.flagCountryCode());
+        fields.put("currentCompetition", team.currentCompetition());
+        fields.put("coach", team.coach() == null ? null : fromCoach(team.coach()));
+        fields.put("tournamentHistory", fromTournamentHistory(team.tournamentHistory()));
+        fields.put("statsAsOf", team.statsAsOf());
+        fields.put("dataNotes", team.dataNotes());
+        fields.put("refreshedAt", team.refreshedAt() == null ? null : Timestamp.ofTimeSecondsAndNanos(
+                team.refreshedAt().getEpochSecond(), team.refreshedAt().getNano()));
+        return fields;
     }
 
     static Match toMatch(DocumentSnapshot doc) {
@@ -148,10 +204,6 @@ final class FirestoreDocuments {
     // Firestore stores all integers as 64-bit, so they come back as Long.
     private static int number(Map<String, Object> m, String key) {
         return ((Number) m.get(key)).intValue();
-    }
-
-    private static int intOrZero(Long value) {
-        return value == null ? 0 : value.intValue();
     }
 
     private static Integer intOrNull(Long value) {

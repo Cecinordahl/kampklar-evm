@@ -2,8 +2,16 @@ import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { MatchList } from "../components/MatchList";
 import { LoadError, Loading } from "../components/Status";
-import { useGroupMatches, useGroupsForTeam, useSquad, useTeam, useTeams } from "../lib/useFirestore";
-import type { Player } from "../types/firestore";
+import { formatAge, formatIsoDate, formatStat } from "../lib/format";
+import {
+  useConsideredPlayers,
+  useGroupMatches,
+  useGroupsForTeam,
+  useSquad,
+  useTeam,
+  useTeams,
+} from "../lib/useFirestore";
+import type { Coach, Player } from "../types/firestore";
 
 const POSITIONS: { code: string; label: string }[] = [
   { code: "GK", label: "Keepere" },
@@ -20,13 +28,14 @@ export function TeamPage() {
   const group = groups.data[0];
   const matches = useGroupMatches(group?.id);
   const squad = useSquad(teamId);
+  const considered = useConsideredPlayers(teamId);
 
   if (team.loading) return <Loading />;
   if (team.error) return <LoadError error={team.error} />;
   if (!team.data || !teamId) return <p>Fant ikke laget.</p>;
 
   const teamMatches = matches.data.filter((m) => m.homeTeamId === teamId || m.awayTeamId === teamId);
-  const { coach, tournamentHistory, refreshedAt } = team.data;
+  const { coach, tournamentHistory, refreshedAt, currentCompetition, statsAsOf, dataNotes } = team.data;
 
   return (
     <>
@@ -35,7 +44,14 @@ export function TeamPage() {
         <FavoriteButton teamId={teamId} teamName={team.data.name} />
       </div>
       <p className="lead">
-        {coach ? <>Landslagssjef: {coach.name} ({coach.nationality})</> : "Lagdata er ikke hentet ennå."}
+        {coach ? (
+          <>
+            Landslagssjef: {coach.name}
+            {coach.nationality && <> ({coach.nationality})</>}
+          </>
+        ) : (
+          "Lagdata er ikke hentet ennå."
+        )}
         {group && (
           <>
             {" · "}
@@ -43,6 +59,7 @@ export function TeamPage() {
           </>
         )}
       </p>
+      {currentCompetition && <p className="muted small">{currentCompetition}</p>}
 
       <section className="section">
         <h2>Kamper</h2>
@@ -70,19 +87,28 @@ export function TeamPage() {
               label="Annet"
               players={squad.data.filter((p) => !POSITIONS.some(({ code }) => code === p.position))}
             />
+            <SquadGroup label="Vurdert / skadet" players={considered.data} />
           </div>
+        )}
+        {statsAsOf && (
+          <p className="muted small">
+            Landskamper og mål per {formatIsoDate(statsAsOf)}, pluss kamper registrert her etterpå. – betyr ukjent.
+          </p>
         )}
       </section>
 
+      {coach && (coach.bio || coach.record || coach.birthDate || coach.appointedDate) && <CoachSection coach={coach} />}
+
       {tournamentHistory.length > 0 && (
         <section className="section">
-          <h2>EM og VM siden 2000</h2>
+          <h2>Turneringshistorikk</h2>
           <table className="history">
             <thead>
               <tr>
                 <th scope="col">År</th>
                 <th scope="col">Turnering</th>
                 <th scope="col">Resultat</th>
+                <th scope="col" className="wide-only">Detaljer</th>
               </tr>
             </thead>
             <tbody>
@@ -92,7 +118,11 @@ export function TeamPage() {
                   <tr key={`${entry.tournament}-${entry.year}`}>
                     <td>{entry.year}</td>
                     <td>{entry.tournament}</td>
-                    <td>{entry.result}</td>
+                    <td>
+                      {entry.result}
+                      {entry.detail && <div className="muted small narrow-only">{entry.detail}</div>}
+                    </td>
+                    <td className="wide-only muted small">{entry.detail}</td>
                   </tr>
                 ))}
             </tbody>
@@ -103,8 +133,15 @@ export function TeamPage() {
       {refreshedAt && (
         <p className="muted small">
           Lagdata sist oppdatert {refreshedAt.toLocaleDateString("nb-NO", { timeZone: "Europe/Oslo" })}.
-          Tropp og statistikk er hentet automatisk fra offentlige kilder og kan inneholde feil.
+          Tropp og statistikk er hentet fra offentlige kilder og kan inneholde feil.
         </p>
+      )}
+      {dataNotes.length > 0 && (
+        <ul className="muted small data-notes">
+          {dataNotes.map((note) => (
+            <li key={note}>{note}</li>
+          ))}
+        </ul>
       )}
     </>
   );
@@ -120,26 +157,54 @@ function SquadGroup({ label, players }: { label: string; players: Player[] }) {
           <tr>
             <th scope="col">Navn</th>
             <th scope="col" className="wide-only">Klubb</th>
+            <th scope="col" className="num" title="Alder">Alder</th>
             <th scope="col" className="num" title="Landskamper">Kamper</th>
             <th scope="col" className="num" title="Landslagsmål">Mål</th>
           </tr>
         </thead>
         <tbody>
           {[...players]
-            .sort((a, b) => b.caps - a.caps)
+            // Unknown caps sort last.
+            .sort((a, b) => (b.caps ?? -1) - (a.caps ?? -1))
             .map((p) => (
               <tr key={p.id}>
                 <td>
                   {p.name}
+                  {p.captain && <abbr title="Kaptein"> (K)</abbr>}
                   {p.club && <span className="muted narrow-only"> · {p.club}</span>}
+                  {p.note && <div className="muted small">{p.note}</div>}
                 </td>
                 <td className="wide-only muted">{p.club}</td>
-                <td className="num">{p.caps}</td>
-                <td className="num">{p.goals}</td>
+                <td className="num" title={p.birthYearUnverified ? "Fødselsår ikke verifisert" : undefined}>
+                  {formatAge(p.birthDate, p.birthYear)}
+                </td>
+                <td className="num">{formatStat(p.caps)}</td>
+                <td className="num">{formatStat(p.goals)}</td>
               </tr>
             ))}
         </tbody>
       </table>
     </div>
+  );
+}
+
+function CoachSection({ coach }: { coach: Coach }) {
+  const { record } = coach;
+  return (
+    <section className="section">
+      <h2>Landslagssjef</h2>
+      <p>
+        <strong>{coach.name}</strong>
+        {coach.birthDate && <>, {formatAge(coach.birthDate, null)} år</>}
+        {coach.appointedDate && <> · ansatt {formatIsoDate(coach.appointedDate)}</>}
+      </p>
+      {record && (
+        <p className="muted small">
+          {record.matches} kamper: {record.wins} seire, {record.draws} uavgjort, {record.losses} tap
+          ({record.goalsFor}–{record.goalsAgainst}), per {formatIsoDate(record.asOf)}.
+        </p>
+      )}
+      {coach.bio && <p>{coach.bio}</p>}
+    </section>
   );
 }

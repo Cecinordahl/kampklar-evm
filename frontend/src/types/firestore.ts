@@ -42,22 +42,43 @@ export interface Match {
   awayScorerIds: string[];
 }
 
+// null everywhere below means "unknown" - shown as "–", never as 0.
+export interface CoachRecord {
+  matches: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  asOf: string;
+}
+
 export interface Coach {
   name: string;
-  nationality: string;
+  nationality: string | null;
+  birthDate: string | null;
+  // ISO, sometimes month precision only ("2022-12").
+  appointedDate: string | null;
+  bio: string | null;
+  record: CoachRecord | null;
 }
 
 export interface TournamentHistoryEntry {
   tournament: string;
   year: number;
   result: string;
+  detail: string | null;
 }
 
 export interface Team {
   id: string;
   name: string;
+  currentCompetition: string | null;
   coach: Coach | null;
   tournamentHistory: TournamentHistoryEntry[];
+  // When the caps/goals baseline was published (ISO date).
+  statsAsOf: string | null;
+  dataNotes: string[];
   refreshedAt: Date | null;
 }
 
@@ -69,9 +90,16 @@ export interface Player {
   name: string;
   position: Position | string;
   club: string | null;
-  caps: number;
-  goals: number;
+  // Age is computed from these, never stored.
+  birthDate: string | null;
+  birthYear: number | null;
+  birthYearUnverified: boolean;
+  caps: number | null;
+  goals: number | null;
   inSquad: boolean;
+  squadStatus: "confirmed" | "considered" | null;
+  captain: boolean;
+  note: string | null;
 }
 
 type Snapshot = QueryDocumentSnapshot<DocumentData> | DocumentSnapshot<DocumentData>;
@@ -112,8 +140,20 @@ export function toTeam(doc: Snapshot): Team {
   return {
     id: doc.id,
     name: d.name ?? doc.id,
-    coach: d.coach ?? null,
-    tournamentHistory: d.tournamentHistory ?? [],
+    currentCompetition: d.currentCompetition ?? null,
+    coach: d.coach
+      ? {
+          name: d.coach.name,
+          nationality: d.coach.nationality ?? null,
+          birthDate: d.coach.birthDate ?? null,
+          appointedDate: d.coach.appointedDate ?? null,
+          bio: d.coach.bio ?? null,
+          record: d.coach.record ?? null,
+        }
+      : null,
+    tournamentHistory: (d.tournamentHistory ?? []).map((e: TournamentHistoryEntry) => ({ ...e, detail: e.detail ?? null })),
+    statsAsOf: d.statsAsOf ?? null,
+    dataNotes: d.dataNotes ?? [],
     refreshedAt: d.refreshedAt ? d.refreshedAt.toDate() : null,
   };
 }
@@ -126,8 +166,14 @@ export function toPlayer(doc: Snapshot): Player {
     name: d.name,
     position: d.position,
     club: d.club ?? null,
-    caps: d.caps ?? 0,
-    goals: d.goals ?? 0,
+    birthDate: d.birthDate ?? null,
+    birthYear: d.birthYear ?? null,
+    birthYearUnverified: d.birthYearUnverified === true,
+    caps: d.caps ?? null,
+    goals: d.goals ?? null,
     inSquad: d.inSquad !== false,
+    squadStatus: d.squadStatus ?? null,
+    captain: d.captain === true,
+    note: d.note ?? null,
   };
 }

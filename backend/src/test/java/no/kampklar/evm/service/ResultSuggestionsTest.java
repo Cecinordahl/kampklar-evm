@@ -61,6 +61,6 @@ class ResultSuggestionsTest {
     }
 
     private static Player player(String id, String teamId, String name) {
-        return new Player(id, teamId, name, "FW", "Club", 10, 2, true);
+        return Player.researched(id, teamId, name, "FW", "Club", 10, 2, true);
     }
 }

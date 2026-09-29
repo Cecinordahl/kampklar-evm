@@ -10,8 +10,8 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 class SquadMergeTest {
 
-    private static final Player HAALAND = new Player("haaland", "norway", "Erling Haaland", "FW", "Man City", 45, 42, true);
-    private static final Player ODEGAARD = new Player("odegaard", "norway", "Martin Ødegaard", "MF", "Arsenal", 60, 5, true);
+    private static final Player HAALAND = Player.researched("haaland", "norway", "Erling Haaland", "FW", "Man City", 45, 42, true);
+    private static final Player ODEGAARD = Player.researched("odegaard", "norway", "Martin Ødegaard", "MF", "Arsenal", 60, 5, true);
 
     @Test
     void addsANewPlayerWithResearchedCapsAndGoalsAndASlugId() {
@@ -19,7 +19,7 @@ class SquadMergeTest {
                 List.of(new TeamResearch.Player("Antonio Nusa", "FW", "RB Leipzig", 15, 3)));
 
         assertThat(plan.added()).containsExactly(
-                new Player("norway-antonio-nusa", "norway", "Antonio Nusa", "FW", "RB Leipzig", 15, 3, true));
+                Player.researched("norway-antonio-nusa", "norway", "Antonio Nusa", "FW", "RB Leipzig", 15, 3, true));
         assertThat(plan.updated()).isEmpty();
     }
 
@@ -29,7 +29,7 @@ class SquadMergeTest {
                 List.of(new TeamResearch.Player("Erling Haaland", "FW", "Real Madrid", 44, 40)));
 
         assertThat(plan.updated()).containsExactly(
-                new Player("haaland", "norway", "Erling Haaland", "FW", "Real Madrid", 45, 42, true));
+                Player.researched("haaland", "norway", "Erling Haaland", "FW", "Real Madrid", 45, 42, true));
         assertThat(plan.added()).isEmpty();
     }
 
@@ -53,7 +53,7 @@ class SquadMergeTest {
 
     @Test
     void doesNotReportAPlayerWhoAlreadyLeftAsLeavingAgain() {
-        Player alreadyGone = new Player("riise", "norway", "John Arne Riise", "DF", null, 110, 16, false);
+        Player alreadyGone = Player.researched("riise", "norway", "John Arne Riise", "DF", null, 110, 16, false);
 
         SquadMerge.Plan plan = SquadMerge.plan("norway", List.of(alreadyGone), List.of());
 
@@ -71,7 +71,7 @@ class SquadMergeTest {
 
     @Test
     void avoidsAnIdCollisionWithADifferentExistingPlayer() {
-        Player sameSlugDifferentName = new Player("norway-ola-aina", "norway", "Ola Aina Sr", "DF", null, 3, 0, true);
+        Player sameSlugDifferentName = Player.researched("norway-ola-aina", "norway", "Ola Aina Sr", "DF", null, 3, 0, true);
 
         SquadMerge.Plan plan = SquadMerge.plan("norway", List.of(sameSlugDifferentName),
                 List.of(new TeamResearch.Player("Ola Aina", "DF", "Nottingham Forest", 1, 0)));

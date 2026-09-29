@@ -95,7 +95,7 @@ class MatchValidatorTest {
     @Test
     void rejectsALineupPlayerFromTheWrongTeam() {
         Match match = finished(0, 0, List.of("yamal"), List.of(), List.of(), List.of());
-        Map<String, Player> players = Map.of("yamal", new Player("yamal", "spain", "Lamine Yamal", "FW", "Barcelona", 20, 5, true));
+        Map<String, Player> players = Map.of("yamal", Player.researched("yamal", "spain", "Lamine Yamal", "FW", "Barcelona", 20, 5, true));
 
         assertThatThrownBy(() -> MatchValidator.validatePlayers(match, players))
                 .isInstanceOf(InvalidMatchException.class)
