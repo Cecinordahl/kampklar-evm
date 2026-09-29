@@ -3,6 +3,8 @@ package no.kampklar.evm.service;
 import com.anthropic.client.AnthropicClient;
 import com.anthropic.client.okhttp.AnthropicOkHttpClient;
 import com.anthropic.errors.AnthropicException;
+import com.anthropic.models.beta.messages.BetaCacheControlEphemeral;
+import com.anthropic.models.beta.messages.BetaOutputConfig;
 import com.anthropic.models.beta.messages.BetaStopReason;
 import com.anthropic.models.beta.messages.BetaThinkingConfigAdaptive;
 import com.anthropic.models.beta.messages.BetaWebSearchTool20260209;
@@ -28,7 +30,8 @@ public class ClaudeResearchClient {
 
     private static final Logger log = LoggerFactory.getLogger(ClaudeResearchClient.class);
 
-    static final String MODEL = "claude-opus-5";
+    /** Default model: the current Opus. Callers may pick a cheaper one for simpler lookups. */
+    static final String MODEL = "claude-opus-5-5";
     // Web search runs a server-side loop that may hand back a paused turn to be resumed.
     private static final int MAX_CONTINUATIONS = 5;
 
@@ -42,19 +45,32 @@ public class ClaudeResearchClient {
                 .build();
     }
 
-    /** A research request with the shared settings; callers add the user message. */
+    /**
+     * A research request with the shared settings; callers add the user message.
+     *
+     * <p>Cost levers, since search results dominate the bill: {@code effort} bounds thinking,
+     * {@code maxSearches} caps how many result pages enter the context, {@code allowedDomains}
+     * (empty = any site) keeps them to relevant sources, and caching bills history resent on
+     * each pause_turn continuation at the cache-read price.
+     */
     static <T> StructuredMessageCreateParams.Builder<T> requestBuilder(
-            String systemPrompt, Class<T> answerType, long maxSearches) {
+            String model, BetaOutputConfig.Effort effort, String systemPrompt, Class<T> answerType,
+            long maxSearches, List<String> allowedDomains) {
+        BetaWebSearchTool20260209.Builder webSearch = BetaWebSearchTool20260209.builder().maxUses(maxSearches);
+        if (!allowedDomains.isEmpty()) {
+            webSearch.allowedDomains(allowedDomains);
+        }
         return MessageCreateParams.builder()
-                .model(MODEL)
+                .model(model)
                 .maxTokens(16000L)
                 // Re-runs a (rare) safety-classifier refusal on Anthropic's recommended fallback model.
                 .addBeta("server-side-fallback-2026-07-01")
                 .fallbacksDefault()
                 .thinking(BetaThinkingConfigAdaptive.builder().build())
-                .addTool(BetaWebSearchTool20260209.builder().maxUses(maxSearches).build())
+                .addTool(webSearch.build())
+                .cacheControl(BetaCacheControlEphemeral.builder().build())
                 .system(systemPrompt)
-                .outputConfig(answerType);
+                .outputConfig(answerType, effort);
     }
 
     /** Runs the request to completion; {@code label} names the subject in logs and errors. */
@@ -65,7 +81,11 @@ public class ClaudeResearchClient {
         try {
             for (int attempt = 0; attempt <= MAX_CONTINUATIONS; attempt++) {
                 StructuredMessage<T> response = client.beta().messages().create(request.build());
-                log.info("Research for {} (call {}): usage {}", label, attempt + 1, response.usage());
+                var usage = response.usage();
+                log.info("Research for {} (call {}): input {} + cache write {} + cache read {}, output {}, searches {}",
+                        label, attempt + 1, usage.inputTokens(), usage.cacheCreationInputTokens().orElse(0L),
+                        usage.cacheReadInputTokens().orElse(0L), usage.outputTokens(),
+                        usage.serverToolUse().map(t -> t.webSearchRequests()).orElse(0L));
 
                 BetaStopReason stopReason = response.stopReason().orElse(null);
                 if (BetaStopReason.PAUSE_TURN.equals(stopReason)) {

@@ -21,6 +21,6 @@ class TeamResearchServiceTest {
         // Catches an unsupported schema shape in TeamResearch before it costs a paid API call.
         var params = TeamResearchService.buildRequest("norway", "Norge").build();
 
-        assertThat(params.rawParams().model().asString()).isEqualTo("claude-opus-5");
+        assertThat(params.rawParams().model().asString()).isEqualTo("claude-opus-5-5");
     }
 }

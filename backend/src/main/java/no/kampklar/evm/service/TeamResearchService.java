@@ -1,11 +1,14 @@
 package no.kampklar.evm.service;
 
+import com.anthropic.models.beta.messages.BetaOutputConfig;
 import com.anthropic.models.beta.messages.StructuredMessageCreateParams;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * Asks Claude to research a national team's current squad, coach and tournament history
- * using web search. Each refresh costs roughly $0.30-0.60.
+ * using web search.
  */
 @Service
 public class TeamResearchService {
@@ -35,7 +38,9 @@ public class TeamResearchService {
 
     // Package-private so a test can build it: the SDK validates the TeamResearch schema here.
     static StructuredMessageCreateParams.Builder<TeamResearch> buildRequest(String teamId, String teamName) {
-        return ClaudeResearchClient.requestBuilder(SYSTEM_PROMPT, TeamResearch.class, 10L)
+        // Any site: squad announcements live on each country's own federation site.
+        return ClaudeResearchClient.requestBuilder(ClaudeResearchClient.MODEL, BetaOutputConfig.Effort.MEDIUM,
+                        SYSTEM_PROMPT, TeamResearch.class, 6L, List.of())
                 .addUserMessage("Research the men's senior national football team of %s (team id \"%s\")."
                         .formatted(teamName, teamId));
     }

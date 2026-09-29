@@ -1,5 +1,6 @@
 package no.kampklar.evm.service;
 
+import com.anthropic.models.beta.messages.BetaOutputConfig;
 import com.anthropic.models.beta.messages.StructuredMessageCreateParams;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,18 @@ public class ResultResearchService {
             and cross-check the score and scorers with a second source. Only mark a match as \
             played when it has finished. Write player names as they appear in the squad lists \
             you are given whenever it is the same player, so they can be matched.""";
+
+    // Compared on group A1 (2026-09-29): Opus 5.5 at low effort got every score, scorer and
+    // no wrong player; Sonnet 5.5 at medium got 1 of 4 scores. Low effort is enough for lookup,
+    // but 12 searches are needed to find the lineups (8 missed a whole match).
+    private static final String MODEL = ClaudeResearchClient.MODEL;
+    private static final BetaOutputConfig.Effort EFFORT = BetaOutputConfig.Effort.LOW;
+
+    // Match reports and lineups; a result is published on several of these within minutes.
+    // bbc.com is left out: it blocks Anthropic's crawler and the API rejects the whole request.
+    private static final List<String> SOURCES = List.of(
+            "uefa.com", "espn.com", "skysports.com", "foxsports.com", "fotmob.com",
+            "flashscore.com", "wikipedia.org", "tntsports.co.uk", "fotball.no", "nrk.no");
 
     private static final DateTimeFormatter DATE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm 'UTC'")
             .withZone(ZoneOffset.UTC);
@@ -50,7 +63,8 @@ public class ResultResearchService {
                         f.homeName(), String.join(", ", f.homeSquad()),
                         f.awayName(), String.join(", ", f.awaySquad())))
                 .collect(Collectors.joining("\n"));
-        return ClaudeResearchClient.requestBuilder(SYSTEM_PROMPT, ResultResearch.class, 15L)
+        return ClaudeResearchClient.requestBuilder(MODEL, EFFORT,
+                        SYSTEM_PROMPT, ResultResearch.class, 12L, SOURCES)
                 .addUserMessage("UEFA Nations League 2026/27, %s. Find the result of each of these matches:\n%s"
                         .formatted(groupName, matches));
     }

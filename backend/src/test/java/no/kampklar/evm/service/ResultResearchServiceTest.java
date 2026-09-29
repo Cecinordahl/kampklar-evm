@@ -17,6 +17,6 @@ class ResultResearchServiceTest {
 
         var params = ResultResearchService.buildRequest("Gruppe A1", List.of(fixture)).build();
 
-        assertThat(params.rawParams().model().asString()).isEqualTo("claude-opus-5");
+        assertThat(params.rawParams().model().asString()).isEqualTo("claude-opus-5-5");
     }
 }
