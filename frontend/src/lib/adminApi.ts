@@ -81,3 +81,34 @@ export function suggestResults(groupId: string, matchIds: string[]): Promise<Res
     body: JSON.stringify({ matchIds }),
   });
 }
+
+/** Every manually editable player field; null = unknown. caps/goals set here are a baseline correction. */
+export interface PlayerEdit {
+  club: string | null;
+  position: string;
+  birthDate: string | null;
+  birthYear: number | null;
+  squadStatus: "confirmed" | "considered" | null;
+  captain: boolean;
+  note: string | null;
+  caps: number | null;
+  goals: number | null;
+}
+
+export function editPlayer(playerId: string, body: PlayerEdit): Promise<void> {
+  return adminFetch(`/admin/players/${playerId}`, { method: "PUT", body: JSON.stringify(body) });
+}
+
+/** The coach's descriptive fields and the data notes; the coach's match record is kept as stored. */
+export interface TeamDetailsEdit {
+  coachName: string;
+  coachNationality: string | null;
+  coachBirthDate: string | null;
+  coachAppointedDate: string | null;
+  coachBio: string | null;
+  dataNotes: string[];
+}
+
+export function editTeamDetails(teamId: string, body: TeamDetailsEdit): Promise<void> {
+  return adminFetch(`/admin/teams/${teamId}/details`, { method: "PUT", body: JSON.stringify(body) });
+}

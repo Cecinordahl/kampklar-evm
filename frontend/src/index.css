@@ -453,6 +453,7 @@ tr.highlight td {
 
 .admin-field input,
 .admin-field select,
+.admin-field textarea,
 .admin-goals-input input {
   font: inherit;
   font-weight: 400;
@@ -987,4 +988,50 @@ tr.highlight td {
 
 .editable-match .admin-match-form {
   margin-bottom: 0.75rem;
+}
+
+.admin-inline-form {
+  margin: 0.5rem 0 0.75rem;
+  padding: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  gap: 0.75rem;
+}
+
+.admin-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 170px), 1fr));
+  gap: 0.75rem;
+}
+
+.admin-field textarea {
+  resize: vertical;
+}
+
+.admin-checkbox {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: end;
+}
+
+.admin-baseline {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem 0.75rem;
+  margin: 0;
+}
+
+.admin-baseline legend {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.admin-baseline p {
+  margin: 0.4rem 0 0;
+}
+
+.edit-row td {
+  padding-top: 0;
 }

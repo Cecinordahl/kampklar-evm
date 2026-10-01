@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { MatchList } from "../components/MatchList";
 import { EditableMatchList } from "../components/admin/EditableMatchList";
+import { PlayerEditForm } from "../components/admin/PlayerEditForm";
+import { TeamDetailsForm } from "../components/admin/TeamDetailsForm";
 import { TeamRefreshPanel } from "../components/admin/TeamRefreshPanel";
 import { useAdminMode } from "../lib/adminMode";
 import { LoadError, Loading } from "../components/Status";
@@ -14,7 +17,7 @@ import {
   useTeam,
   useTeams,
 } from "../lib/useFirestore";
-import type { Coach, Player } from "../types/firestore";
+import type { Player, Team } from "../types/firestore";
 
 const POSITIONS: { code: string; label: string }[] = [
   { code: "GK", label: "Keepere" },
@@ -93,13 +96,19 @@ export function TeamPage() {
         ) : (
           <div className="squad">
             {POSITIONS.map(({ code, label }) => (
-              <SquadGroup key={code} label={label} players={squad.data.filter((p) => p.position === code)} />
+              <SquadGroup
+                key={code}
+                label={label}
+                players={squad.data.filter((p) => p.position === code)}
+                editable={admin.active}
+              />
             ))}
             <SquadGroup
               label="Annet"
               players={squad.data.filter((p) => !POSITIONS.some(({ code }) => code === p.position))}
+              editable={admin.active}
             />
-            <SquadGroup label="Vurdert / skadet" players={considered.data} />
+            <SquadGroup label="Vurdert / skadet" players={considered.data} editable={admin.active} />
           </div>
         )}
         {statsAsOf && (
@@ -109,7 +118,9 @@ export function TeamPage() {
         )}
       </section>
 
-      {coach && (coach.bio || coach.record || coach.birthDate || coach.appointedDate) && <CoachSection coach={coach} />}
+      {(admin.active || (coach && (coach.bio || coach.record || coach.birthDate || coach.appointedDate))) && (
+        <CoachSection team={team.data} editable={admin.active} />
+      )}
 
       {tournamentHistory.length > 0 && (
         <section className="section">
@@ -159,8 +170,10 @@ export function TeamPage() {
   );
 }
 
-function SquadGroup({ label, players }: { label: string; players: Player[] }) {
+function SquadGroup({ label, players, editable }: { label: string; players: Player[]; editable: boolean }) {
+  const [editingId, setEditingId] = useState<string | null>(null);
   if (players.length === 0) return null;
+  const columns = editable ? 6 : 5;
   return (
     <div className="squad-group">
       <h3>{label}</h3>
@@ -172,13 +185,14 @@ function SquadGroup({ label, players }: { label: string; players: Player[] }) {
             <th scope="col" className="num" title="Alder">Alder</th>
             <th scope="col" className="num" title="Landskamper">Kamper</th>
             <th scope="col" className="num" title="Landslagsmål">Mål</th>
+            {editable && <th scope="col" className="visually-hidden">Rediger</th>}
           </tr>
         </thead>
         <tbody>
           {[...players]
             // Unknown caps sort last.
             .sort((a, b) => (b.caps ?? -1) - (a.caps ?? -1))
-            .map((p) => (
+            .flatMap((p) => [
               <tr key={p.id}>
                 <td>
                   {p.name}
@@ -192,31 +206,67 @@ function SquadGroup({ label, players }: { label: string; players: Player[] }) {
                 </td>
                 <td className="num">{formatStat(p.caps)}</td>
                 <td className="num">{formatStat(p.goals)}</td>
-              </tr>
-            ))}
+                {editable && (
+                  <td className="num">
+                    <button
+                      type="button"
+                      className="link-button"
+                      aria-label={`Rediger ${p.name}`}
+                      aria-expanded={editingId === p.id}
+                      onClick={() => setEditingId(editingId === p.id ? null : p.id)}
+                    >
+                      ✏️
+                    </button>
+                  </td>
+                )}
+              </tr>,
+              editingId === p.id && (
+                <tr key={`${p.id}-edit`} className="edit-row">
+                  <td colSpan={columns}>
+                    <PlayerEditForm player={p} onDone={() => setEditingId(null)} />
+                  </td>
+                </tr>
+              ),
+            ])}
         </tbody>
       </table>
     </div>
   );
 }
 
-function CoachSection({ coach }: { coach: Coach }) {
-  const { record } = coach;
+function CoachSection({ team, editable }: { team: Team; editable: boolean }) {
+  const [editing, setEditing] = useState(false);
+  const { coach } = team;
+  const record = coach?.record ?? null;
   return (
     <section className="section">
-      <h2>Landslagssjef</h2>
-      <p>
-        <strong>{coach.name}</strong>
-        {coach.birthDate && <>, {formatAge(coach.birthDate, null)} år</>}
-        {coach.appointedDate && <> · ansatt {formatIsoDate(coach.appointedDate)}</>}
-      </p>
-      {record && (
-        <p className="muted small">
-          {record.matches} kamper: {record.wins} seire, {record.draws} uavgjort, {record.losses} tap
-          ({record.goalsFor}–{record.goalsAgainst}), per {formatIsoDate(record.asOf)}.
-        </p>
+      <div className="page-title-row">
+        <h2>Landslagssjef</h2>
+        {editable && !editing && (
+          <button type="button" className="link-button small" onClick={() => setEditing(true)}>
+            ✏️ Rediger landslagssjef og datanotater
+          </button>
+        )}
+      </div>
+      {editing && <TeamDetailsForm team={team} onDone={() => setEditing(false)} />}
+      {!coach ? (
+        <p className="muted">Ikke registrert.</p>
+      ) : (
+        <>
+          <p>
+            <strong>{coach.name}</strong>
+            {coach.birthDate && <>, {formatAge(coach.birthDate, null)} år</>}
+            {coach.appointedDate && <> · ansatt {formatIsoDate(coach.appointedDate)}</>}
+          </p>
+          {record && (
+            <p className="muted small">
+              {record.matches} kamper: {record.wins} seire, {record.draws} uavgjort, {record.losses} tap
+              ({record.goalsFor}–{record.goalsAgainst}), per {formatIsoDate(record.asOf)}.
+            </p>
+          )}
+          {coach.bio && <p>{coach.bio}</p>}
+        </>
       )}
-      {coach.bio && <p>{coach.bio}</p>}
     </section>
   );
 }
