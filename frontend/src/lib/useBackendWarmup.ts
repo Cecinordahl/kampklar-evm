@@ -1,4 +1,4 @@
-// Wakes the backend when the admin view opens. Render's free tier sleeps when idle and takes
+// Wakes the backend when admin mode is switched on. Render's free tier sleeps when idle and takes
 // up to about a minute to start, so the admin sees a timer instead of a button that hangs.
 import { useEffect, useState } from "react";
 
@@ -9,12 +9,16 @@ const GIVE_UP_AFTER_MS = 120_000;
 
 export type BackendStatus = "waking" | "ready" | "failed";
 
-export function useBackendWarmup(): { status: BackendStatus; elapsedSeconds: number } {
+/** {@code active} false (not in admin mode): no requests are made. */
+export function useBackendWarmup(active: boolean): { status: BackendStatus; elapsedSeconds: number } {
   const [status, setStatus] = useState<BackendStatus>("waking");
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
 
   useEffect(() => {
+    if (!active) return;
     let cancelled = false;
+    setStatus("waking");
+    setElapsedSeconds(0);
     const startedAt = Date.now();
     const timer = setInterval(() => setElapsedSeconds(Math.floor((Date.now() - startedAt) / 1000)), 1000);
 
@@ -39,7 +43,7 @@ export function useBackendWarmup(): { status: BackendStatus; elapsedSeconds: num
       cancelled = true;
       clearInterval(timer);
     };
-  }, []);
+  }, [active]);
 
   return { status, elapsedSeconds };
 }

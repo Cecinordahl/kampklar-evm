@@ -1,6 +1,9 @@
 import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { MatchList } from "../components/MatchList";
+import { EditableMatchList } from "../components/admin/EditableMatchList";
+import { TeamRefreshPanel } from "../components/admin/TeamRefreshPanel";
+import { useAdminMode } from "../lib/adminMode";
 import { LoadError, Loading } from "../components/Status";
 import { formatAge, formatIsoDate, formatStat } from "../lib/format";
 import {
@@ -29,6 +32,7 @@ export function TeamPage() {
   const matches = useGroupMatches(group?.id);
   const squad = useSquad(teamId);
   const considered = useConsideredPlayers(teamId);
+  const admin = useAdminMode();
 
   if (team.loading) return <Loading />;
   if (team.error) return <LoadError error={team.error} />;
@@ -60,11 +64,19 @@ export function TeamPage() {
         )}
       </p>
       {currentCompetition && <p className="muted small">{currentCompetition}</p>}
+      {admin.active && <TeamRefreshPanel team={team.data} />}
 
       <section className="section">
         <h2>Kamper</h2>
         {matches.error ? (
           <LoadError error={matches.error} />
+        ) : admin.active ? (
+          <EditableMatchList
+            matches={teamMatches}
+            teams={teams.data}
+            highlightTeamIds={[teamId]}
+            scopeLabel={team.data.name}
+          />
         ) : (
           <MatchList matches={teamMatches} teams={teams.data} highlightTeamIds={[teamId]} />
         )}

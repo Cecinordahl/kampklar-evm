@@ -1,41 +1,19 @@
-import { signOutAdmin, useAdminAuth } from "../lib/auth";
-import { useBackendWarmup } from "../lib/useBackendWarmup";
+import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
+import { useAdminMode } from "../lib/adminMode";
 import { Loading } from "../components/Status";
-import { BackendStatusBanner } from "../components/admin/BackendStatusBanner";
 import { LoginForm } from "../components/admin/LoginForm";
-import { MatchEntrySection } from "../components/admin/MatchEntrySection";
-import { TeamRefreshSection } from "../components/admin/TeamRefreshSection";
 
+/** Login only: once logged in, admin mode is switched on and the admin edits on the regular pages. */
 export function AdminPage() {
-  const { user, loading } = useAdminAuth();
+  const { user, authLoading, setEnabled } = useAdminMode();
+  const loggedIn = user !== null;
 
-  if (loading) return <Loading />;
-  if (!user) return <LoginForm />;
-  return <AdminView email={user.email} />;
-}
+  useEffect(() => {
+    if (loggedIn) setEnabled(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on login
+  }, [loggedIn]);
 
-/** Nothing that writes is shown until the backend has answered, so no save can hang on a cold start. */
-function AdminView({ email }: { email: string | null }) {
-  const backend = useBackendWarmup();
-
-  return (
-    <>
-      <div className="page-title-row">
-        <h1>Admin</h1>
-        <button type="button" className="button button-secondary" onClick={() => signOutAdmin()}>
-          Logg ut
-        </button>
-      </div>
-      <p className="muted small">Innlogget som {email}</p>
-
-      {backend.status === "ready" ? (
-        <>
-          <MatchEntrySection />
-          <TeamRefreshSection />
-        </>
-      ) : (
-        <BackendStatusBanner status={backend.status} elapsedSeconds={backend.elapsedSeconds} />
-      )}
-    </>
-  );
+  if (authLoading) return <Loading />;
+  return loggedIn ? <Navigate to="/" replace /> : <LoginForm />;
 }

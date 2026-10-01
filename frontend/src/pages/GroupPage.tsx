@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { MatchList } from "../components/MatchList";
+import { EditableMatchList } from "../components/admin/EditableMatchList";
+import { useAdminMode } from "../lib/adminMode";
 import { StandingsTable } from "../components/StandingsTable";
 import { LoadError, Loading } from "../components/Status";
 import { useFavorites } from "../lib/useFavorites";
@@ -11,6 +13,7 @@ export function GroupPage() {
   const matches = useGroupMatches(groupId);
   const teams = useTeams();
   const { favoriteIds } = useFavorites();
+  const admin = useAdminMode();
 
   if (group.loading) return <Loading />;
   if (group.error) return <LoadError error={group.error} />;
@@ -33,6 +36,13 @@ export function GroupPage() {
         <h2>Kamper</h2>
         {matches.error ? (
           <LoadError error={matches.error} />
+        ) : admin.active ? (
+          <EditableMatchList
+            matches={matches.data}
+            teams={teams.data}
+            highlightTeamIds={favoriteIds}
+            scopeLabel={`gruppe ${group.data.name}`}
+          />
         ) : (
           <MatchList matches={matches.data} teams={teams.data} highlightTeamIds={favoriteIds} />
         )}
