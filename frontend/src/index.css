@@ -1035,3 +1035,31 @@ tr.highlight td {
 .edit-row td {
   padding-top: 0;
 }
+
+/* Siste nytt */
+.news-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.news-list li {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.news-list li:last-child {
+  border-bottom: none;
+}
+
+.news-title {
+  font-weight: 600;
+}
+
+.news-teaser {
+  margin: 0.15rem 0;
+  font-size: 0.9rem;
+}

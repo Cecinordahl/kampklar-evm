@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
+import { TeamNews } from "../components/TeamNews";
 import { MatchList } from "../components/MatchList";
 import { EditableMatchList } from "../components/admin/EditableMatchList";
 import { PlayerEditForm } from "../components/admin/PlayerEditForm";
@@ -84,6 +85,8 @@ export function TeamPage() {
           <MatchList matches={teamMatches} teams={teams.data} highlightTeamIds={[teamId]} />
         )}
       </section>
+
+      <TeamNews teamId={teamId} />
 
       <section className="section">
         <h2>Tropp</h2>
