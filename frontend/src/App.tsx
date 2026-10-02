@@ -5,6 +5,7 @@ import { AdminPage } from "./pages/AdminPage";
 import { EmPage } from "./pages/EmPage";
 import { GroupPage } from "./pages/GroupPage";
 import { HomePage } from "./pages/HomePage";
+import { NationsLeaguePage } from "./pages/NationsLeaguePage";
 import { TeamPage } from "./pages/TeamPage";
 import { VmPage } from "./pages/VmPage";
 
@@ -19,6 +20,7 @@ export default function App() {
             <Route path="lag/:teamId" element={<TeamPage />} />
             <Route path="em" element={<EmPage />} />
             <Route path="vm" element={<VmPage />} />
+            <Route path="nations-league" element={<NationsLeaguePage />} />
             {/* Login for admin mode; the backend enforces access on every write. */}
             <Route path="admin" element={<AdminPage />} />
             <Route path="*" element={<p>Fant ikke siden.</p>} />

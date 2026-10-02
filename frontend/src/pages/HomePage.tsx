@@ -54,6 +54,10 @@ export function HomePage() {
             <strong>VM 2030</strong>
             <span className="muted">Ny europeisk kvalik, sluttspillformat og alle VM-finaler siden 1930</span>
           </Link>
+          <Link to="/nations-league" className="card link-card">
+            <strong>Nations League</strong>
+            <span className="muted">Nivåer, grupper, rangering og veien til EM og VM</span>
+          </Link>
         </div>
       </section>
     </>

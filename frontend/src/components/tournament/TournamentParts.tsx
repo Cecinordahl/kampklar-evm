@@ -73,17 +73,20 @@ export function Flow({ stages, caption }: { stages: FlowBox[][]; caption: string
         </div>
       ))}
       <figcaption className="muted small">{caption}</figcaption>
-      <FlowLegend />
+      <FlowLegend used={new Set(stages.flat().map((box) => box.tone ?? "neutral"))} />
     </figure>
   );
 }
 
-function FlowLegend() {
-  const items: { tone: FlowTone; label: string }[] = [
-    { tone: "qualified", label: "Kvalifisert" },
-    { tone: "playoff", label: "Playoff" },
-    { tone: "host", label: "Vertsnasjon" },
-  ];
+/** Only the tones the diagram actually uses, so the legend never explains a colour that isn't there. */
+function FlowLegend({ used }: { used: Set<FlowTone> }) {
+  const items = (
+    [
+      { tone: "qualified", label: "Kvalifisert" },
+      { tone: "playoff", label: "Playoff" },
+      { tone: "host", label: "Vertsnasjon" },
+    ] satisfies { tone: FlowTone; label: string }[]
+  ).filter(({ tone }) => used.has(tone));
   return (
     <ul className="flow-legend small muted">
       {items.map(({ tone, label }) => (

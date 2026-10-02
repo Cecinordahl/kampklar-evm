@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import vm from "../content/vm.json";
 import {
   FinalsFormat,
@@ -38,7 +39,9 @@ export function VmPage() {
       <section className="section">
         <h2>Slik kvalifiserer europeiske lag seg</h2>
         <p className="notice">{q.status}</p>
-        <p>{q.seeding}</p>
+        <p>
+          {q.seeding} <Link to="/nations-league">Slik fungerer Nations League →</Link>
+        </p>
         <Flow
           caption="Den nye europeiske VM-kvaliken: to nivåer, direkte plasser fra nivå 1 og playoff for resten."
           stages={[

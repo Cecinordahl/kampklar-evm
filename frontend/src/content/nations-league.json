@@ -1,0 +1,67 @@
+{
+  "_meta": {
+    "description": "Innhold for Nations League-siden: hva turneringen er, oppsettet 2026–27, rangeringen og hvordan den brukes i EM- og VM-kvaliken.",
+    "generatedAt": "2026-10-02",
+    "verification": "Teksten er gitt av redaksjonen. Liga 1-formuleringen for VM 2030 følger vm.json (UEFA har ikke oppgitt hvor mange som går direkte). Kildene er de samme UEFA-sidene som EM- og VM-siden bygger på.",
+    "sources": [
+      "https://www.uefa.com/euro2028/news/0299-1dcf3fef69a9-41405d004b47-1000--qualification-system-for-uefa-euro-2028-approved/",
+      "https://www.uefa.com/euro2028/news/029f-1f2ff991e87b-345fffcd69c3-1000--uefa-euro-2028-qualifying-draw-to-take-place-in-belfast/",
+      "https://www.uefa.com/news-media/news/02a5-20aba2a6e7e9-38897428c81f-1000--new-concept-for-men-s-national-team-competitions-as-of-2028/"
+    ]
+  },
+  "intro": [
+    "Nations League er UEFAs egen turnering for landslag i Europa. Den er ikke EM- eller VM-kvalik, men den henger sammen med begge: plasseringen din i Nations League påvirker trekningen til EM-kvaliken, og den kan gi en ekstra sjanse til å komme til EM og VM.",
+    "Tenk på det som et seriesystem. Nivå A er toppligaen, nivå B er «2. divisjon», og så videre nedover. De beste kan rykke opp, de dårligste rykker ned."
+  ],
+  "levelsTable": [
+    { "level": "A", "likeLeague": "Toppliga" },
+    { "level": "B", "likeLeague": "2. divisjon" },
+    { "level": "C", "likeLeague": "3. divisjon" },
+    { "level": "D", "likeLeague": "4. divisjon" }
+  ],
+  "current": {
+    "name": "Nations League 2026–27",
+    "levels": ["A", "B", "C", "D"],
+    "levelA": {
+      "teams": 16,
+      "groups": 4,
+      "teamsPerGroup": 4,
+      "matchesPerTeam": 6,
+      "format": "Alle møter alle, hjemme og borte."
+    },
+    "norway": {
+      "text": "Norge spiller på nivå A for første gang, i gruppe med Portugal, Danmark og Wales.",
+      "groupId": "unl-2026-27-a4"
+    },
+    "outcomesA": [
+      { "place": "1. og 2. plass", "result": "Kvartfinale i mars 2027, deretter semifinale og finale i juni 2027.", "tone": "qualified" },
+      { "place": "3. plass", "result": "Kamper mot en toer fra nivå B i mars 2027 for å bli på nivå A.", "tone": "playoff" },
+      { "place": "4. plass", "result": "Rykker ned til nivå B.", "tone": "neutral" }
+    ]
+  },
+  "ranking": [
+    "Etter gruppespillet i november 2026 rangeres alle lagene i én samlet liste.",
+    "Alle lag på nivå A rangeres over alle lag på nivå B, B over C, og så videre.",
+    "En gruppevinner på nivå B kan derfor ikke gå forbi et lag på nivå A."
+  ],
+  "euro2028": {
+    "seeding": "De 12 beste på rangeringen – 1.–3. plass i hver gruppe på nivå A – blir førsteseedet i trekningen av EM-kvaliken 6. desember 2026. EM-kvaliken har 12 grupper, så hver gruppe får ett toppseedet lag.",
+    "backup": "Gruppevinnere i Nations League som ikke kvalifiserer seg via EM-kvaliken, kan få en playoffplass. Det er de best rangerte av disse gruppevinnerne som får plass. Det gir ikke direkte EM-plass, bare en ny sjanse.",
+    "backupSlots": "Antall playoffplasser er 2–4 og avhenger av hvordan det går for vertslandene (England, Skottland, Wales og Irland).",
+    "qualifying": "Selve EM-kvaliken spilles i 2027. De 12 gruppevinnerne og de 8 beste toerne går direkte til EM. Playoff spilles i mars 2028.",
+    "table": [
+      { "position": "1. plass i gruppe på nivå A", "seeding": "Førsteseedet", "backup": "Mulig, hvis laget ikke kvalifiserer seg via EM-kvaliken" },
+      { "position": "2. plass i gruppe på nivå A", "seeding": "Førsteseedet", "backup": "Nei" },
+      { "position": "3. plass i gruppe på nivå A", "seeding": "Førsteseedet", "backup": "Nei" },
+      { "position": "4. plass i gruppe på nivå A", "seeding": "Ikke førsteseedet (bare de 12 beste er det)", "backup": "Nei" },
+      { "position": "Gruppevinner på nivå B, C eller D", "seeding": "Ikke førsteseedet (alle lag på nivå A rangeres over)", "backup": "Mulig – de best rangerte gruppevinnerne som ikke har kvalifisert seg" }
+    ]
+  },
+  "worldCup": {
+    "wc2026": "VM 2026: Nations League 2024–25 ga gruppevinnere en reservevei til playoff – samme prinsipp som for EM.",
+    "wc2030Intro": "VM 2030 får et nytt system. Fra 2028–29 får Nations League 3 nivåer med 18 lag hver, delt i grupper à 6.",
+    "wc2030Leagues": "De 36 beste blir plassert i «Liga 1» i VM-kvaliken: 3 grupper à 12, i et format som ligner på Champions League. Resten havner i «Liga 2».",
+    "wc2030Direct": "De best rangerte lagene i hver Liga 1-gruppe går direkte til VM. Antallet er ikke oppgitt. Resten av plassene avgjøres i playoff.",
+    "wc2030Status": "Detaljene for VM 2030-kvaliken er ikke helt ferdige fra UEFA ennå."
+  }
+}

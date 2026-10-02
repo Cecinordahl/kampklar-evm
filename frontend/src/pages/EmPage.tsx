@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import em from "../content/em.json";
 import {
   FinalsFormat,
@@ -34,7 +35,8 @@ export function EmPage() {
       <section className="section">
         <h2>Slik kvalifiserer lagene seg</h2>
         <p>
-          Trekningen er {formatIsoDate(q.drawDate)} i {q.drawPlace}. {q.seeding}
+          Trekningen er {formatIsoDate(q.drawDate)} i {q.drawPlace}. {q.seeding}{" "}
+          <Link to="/nations-league">Slik fungerer Nations League →</Link>
         </p>
         <Flow
           caption={`Veien til ${next.name}: ${directTotal} direkte, ${q.hostSlots.count} vertsplasser og ${q.playoffs.spots} via playoff.`}
