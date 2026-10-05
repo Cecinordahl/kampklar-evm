@@ -4,11 +4,20 @@
 // shown, with a link to NRK - never the article text the feed carries.
 import { useEffect, useState } from "react";
 
-/** Teams with a dedicated NRK feed. */
-const FEEDS: Record<string, { rss: string; page: string }> = {
+/**
+ * Teams with NRK coverage. NRK moved the men's national team from the tag "Landslaget i fotball,
+ * menn" (which has its own feed, no longer updated) to "Fotballandslaget, menn" (no feed of its
+ * own) in October 2026. So the general sport feeds are read too and filtered on either tag.
+ */
+const FEEDS: Record<string, { rss: string[]; categories: string[]; page: string }> = {
   norway: {
-    rss: "https://www.nrk.no/sport/landslaget-i-fotball_-menn-1.11613046.rss",
-    page: "https://www.nrk.no/sport/landslaget-i-fotball_-menn-1.11613046",
+    rss: [
+      "https://www.nrk.no/sport/toppsaker.rss",
+      "https://www.nrk.no/sport/siste.rss",
+      "https://www.nrk.no/sport/landslaget-i-fotball_-menn-1.11613046.rss",
+    ],
+    categories: ["Fotballandslaget, menn", "Landslaget i fotball, menn"],
+    page: "https://www.nrk.no/fotballandslaget/",
   },
 };
 
@@ -22,6 +31,7 @@ export interface NewsItem {
   link: string;
   published: Date | null;
   teaser: string | null;
+  categories: string[];
 }
 
 /** NRK's page for the team, for the "Kilde" link. */
@@ -52,9 +62,22 @@ export function parseFeed(xml: string): NewsItem[] {
         link: text("link") ?? "",
         published: published && !Number.isNaN(published.getTime()) ? published : null,
         teaser: teaser(text("description")),
+        categories: [...item.querySelectorAll("category")].map((c) => c.textContent?.trim() ?? ""),
       };
     })
-    .filter((item) => item.title && ALLOWED_LINK.test(item.link))
+    .filter((item) => item.title && ALLOWED_LINK.test(item.link));
+}
+
+/** Items tagged with one of {@code categories}, from several feeds: de-duplicated, newest first. */
+export function mergeFeeds(feeds: NewsItem[][], categories: string[]): NewsItem[] {
+  const byLink = new Map<string, NewsItem>();
+  for (const item of feeds.flat()) {
+    if (item.categories.some((c) => categories.includes(c)) && !byLink.has(item.link)) {
+      byLink.set(item.link, item);
+    }
+  }
+  return [...byLink.values()]
+    .sort((a, b) => (b.published?.getTime() ?? 0) - (a.published?.getTime() ?? 0))
     .slice(0, MAX_ITEMS);
 }
 
@@ -62,20 +85,26 @@ export function useTeamNews(teamId: string): { items: NewsItem[]; loading: boole
   const [state, setState] = useState({ items: [] as NewsItem[], loading: true, failed: false });
 
   useEffect(() => {
-    const url = FEEDS[teamId]?.rss;
-    if (!url) return;
+    const feed = FEEDS[teamId];
+    if (!feed) return;
     const controller = new AbortController();
     setState({ items: [], loading: true, failed: false });
-    fetch(url, { signal: controller.signal })
-      .then((response) => {
-        if (!response.ok) throw new Error(`NRK ${response.status}`);
-        return response.text();
-      })
-      .then((xml) => setState({ items: parseFeed(xml), loading: false, failed: false }))
-      .catch((err: unknown) => {
-        if (!controller.signal.aborted) setState({ items: [], loading: false, failed: true });
-        if (!(err instanceof DOMException)) console.warn("Siste nytt kunne ikke hentes", err);
-      });
+    // allSettled: one feed failing must not hide the news found in the others.
+    Promise.allSettled(
+      feed.rss.map((url) =>
+        fetch(url, { signal: controller.signal }).then((response) => {
+          if (!response.ok) throw new Error(`NRK ${response.status} for ${url}`);
+          return response.text();
+        }),
+      ),
+    ).then((results) => {
+      if (controller.signal.aborted) return;
+      const parsed = results.flatMap((r) => (r.status === "fulfilled" ? [parseFeed(r.value)] : []));
+      results
+        .filter((r): r is PromiseRejectedResult => r.status === "rejected")
+        .forEach((r) => console.warn("Siste nytt: en NRK-feed kunne ikke hentes", r.reason));
+      setState({ items: mergeFeeds(parsed, feed.categories), loading: false, failed: parsed.length === 0 });
+    });
     return () => controller.abort();
   }, [teamId]);
 

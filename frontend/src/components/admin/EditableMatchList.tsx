@@ -4,6 +4,7 @@
 import { useState } from "react";
 import { saveMatch, suggestResults, type ResultSuggestion } from "../../lib/adminApi";
 import { useAdminMode } from "../../lib/adminMode";
+import { daysBetween } from "../../lib/format";
 import { MatchRowContent } from "../MatchList";
 import { LongTaskOverlay } from "./LongTaskOverlay";
 import { MatchForm, saveRequest } from "./MatchForm";
@@ -28,6 +29,8 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
 
   const now = new Date();
   const played = (m: Match) => m.kickoff < now;
+  // Nothing to enter before match day (Norwegian time): lineups and results don't exist yet.
+  const matchDayReached = (m: Match) => daysBetween(now, m.kickoff) <= 0;
   const missing = matches.filter((m) => played(m) && m.status !== "FINISHED");
   const name = (teamId: string) => teams.get(teamId)?.name ?? teamId;
   const busy = fetching !== null || savingAll;
@@ -132,33 +135,37 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
               <div className="match">
                 <MatchRowContent match={m} teams={teams} highlightTeamIds={highlightTeamIds} />
               </div>
-              <div className="match-admin-actions">
-                {suggestion && (
-                  <span className="admin-ai-tag">
-                    AI: {suggestion.homeGoals}–{suggestion.awayGoals}
-                    {suggestion.warnings.length > 0 ? " ⚠" : ""}
-                  </span>
-                )}
-                <button
-                  type="button"
-                  className="link-button"
-                  aria-expanded={open}
-                  onClick={() => setOpenMatchId(open ? null : m.id)}
-                >
-                  ✏️ {open ? "Lukk" : "Manuelt"}
-                </button>
-                {played(m) && (
-                  <button
-                    type="button"
-                    className="link-button"
-                    disabled={!ready || busy}
-                    title={notReady}
-                    onClick={() => research([m], `Henter ${name(m.homeTeamId)} – ${name(m.awayTeamId)} med AI`)}
-                  >
-                    ✨ AI
-                  </button>
-                )}
-              </div>
+              {(suggestion || matchDayReached(m)) && (
+                <div className="match-admin-actions">
+                  {suggestion && (
+                    <span className="admin-ai-tag">
+                      AI: {suggestion.homeGoals}–{suggestion.awayGoals}
+                      {suggestion.warnings.length > 0 ? " ⚠" : ""}
+                    </span>
+                  )}
+                  {matchDayReached(m) && (
+                    <button
+                      type="button"
+                      className="link-button"
+                      aria-expanded={open}
+                      onClick={() => setOpenMatchId(open ? null : m.id)}
+                    >
+                      ✏️ {open ? "Lukk" : "Manuelt"}
+                    </button>
+                  )}
+                  {played(m) && (
+                    <button
+                      type="button"
+                      className="link-button"
+                      disabled={!ready || busy}
+                      title={notReady}
+                      onClick={() => research([m], `Henter ${name(m.homeTeamId)} – ${name(m.awayTeamId)} med AI`)}
+                    >
+                      ✨ AI
+                    </button>
+                  )}
+                </div>
+              )}
               {open && (
                 <MatchForm key={`${m.id}-${suggestion ? "ai" : "stored"}`} match={m} suggestion={suggestion} teams={teams} />
               )}
