@@ -130,13 +130,16 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
         {matches.map((m) => {
           const suggestion = suggestions.get(m.id);
           const open = openMatchId === m.id;
+          // Played but no result saved yet: flagged so the gaps stand out in the list.
+          const isMissing = played(m) && m.status !== "FINISHED";
           return (
-            <li key={m.id} className="editable-match">
+            <li key={m.id} className={`editable-match${isMissing ? " is-missing" : ""}`}>
               <div className="match">
-                <MatchRowContent match={m} teams={teams} highlightTeamIds={highlightTeamIds} />
+                <MatchRowContent match={m} teams={teams} highlightTeamIds={highlightTeamIds} missingResult={isMissing} />
               </div>
               {(suggestion || matchDayReached(m)) && (
                 <div className="match-admin-actions">
+                  {isMissing && !suggestion && <span className="admin-missing-tag">Mangler resultat</span>}
                   {suggestion && (
                     <span className="admin-ai-tag">
                       AI: {suggestion.homeGoals}–{suggestion.awayGoals}

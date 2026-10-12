@@ -30,7 +30,12 @@ export function MatchRow(props: { match: Match } & Omit<Props, "matches">) {
 }
 
 /** The cells of a match row, without the list item - admin mode wraps them with its controls. */
-export function MatchRowContent({ match, teams, highlightTeamIds = [] }: { match: Match } & Omit<Props, "matches">) {
+export function MatchRowContent({
+  match,
+  teams,
+  highlightTeamIds = [],
+  missingResult = false,
+}: { match: Match; missingResult?: boolean } & Omit<Props, "matches">) {
   const finished = match.status === "FINISHED";
   const teamLink = (teamId: string) => (
     <Link to={`/lag/${teamId}`} className={highlightTeamIds.includes(teamId) ? "highlight-team" : undefined}>
@@ -45,8 +50,8 @@ export function MatchRowContent({ match, teams, highlightTeamIds = [] }: { match
         {!finished && <span className="muted">{formatTime(match.kickoff)}</span>}
       </time>
       <span className="match-home">{teamLink(match.homeTeamId)}</span>
-      <span className={`match-score${finished ? " is-final" : ""}`}>
-        {finished ? `${match.homeGoals}–${match.awayGoals}` : "–"}
+      <span className={`match-score${finished ? " is-final" : ""}${missingResult ? " is-missing" : ""}`}>
+        {finished ? `${match.homeGoals}–${match.awayGoals}` : missingResult ? "?" : "–"}
       </span>
       <span className="match-away">{teamLink(match.awayTeamId)}</span>
     </>
