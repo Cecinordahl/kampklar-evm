@@ -378,6 +378,32 @@ tr.highlight td {
   font-weight: 700;
 }
 
+/* Public view: a game past kickoff + 2 h with no result */
+.match.is-missing {
+  background: var(--highlight);
+  border-radius: 6px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.match-missing-note {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.match-missing-ping {
+  font-weight: 600;
+  color: var(--link);
+  padding: 0.35rem 0;
+}
+
 .highlight-team {
   font-weight: 700;
 }

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { formatDate, formatTime } from "../lib/format";
+import { isResultMissing } from "../lib/matches";
 import type { Match, Team } from "../types/firestore";
+
+// Where "Si fra" sends visitors; the button is hidden when it isn't configured.
+const ADMIN_EMAIL = import.meta.env.VITE_ADMIN_EMAIL as string | undefined;
 
 interface Props {
   matches: Match[];
@@ -22,10 +26,32 @@ export function MatchList({ matches, teams, highlightTeamIds = [] }: Props) {
 }
 
 export function MatchRow(props: { match: Match } & Omit<Props, "matches">) {
+  const missing = isResultMissing(props.match);
   return (
-    <li className="match">
-      <MatchRowContent {...props} />
+    <li className={`match${missing ? " is-missing" : ""}`}>
+      <MatchRowContent {...props} missingResult={missing} />
+      {missing && <MissingResultNote match={props.match} teams={props.teams} />}
     </li>
+  );
+}
+
+/** The public "result not updated" line, with a prefilled email to the admin. */
+function MissingResultNote({ match, teams }: { match: Match; teams: Map<string, Team> }) {
+  const title = `${teams.get(match.homeTeamId)?.name ?? match.homeTeamId} – ${teams.get(match.awayTeamId)?.name ?? match.awayTeamId}`;
+  const subject = `Resultat mangler: ${title}`;
+  const body = `Hei! Resultatet for ${title} (${formatDate(match.kickoff)} ${formatTime(match.kickoff)}) er ikke oppdatert på Kampklar.`;
+  return (
+    <p className="match-missing-note">
+      <span>Resultatet er ikke oppdatert ennå.</span>
+      {ADMIN_EMAIL && (
+        <a
+          className="match-missing-ping"
+          href={`mailto:${ADMIN_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`}
+        >
+          ✉️ Si fra
+        </a>
+      )}
+    </p>
   );
 }
 
