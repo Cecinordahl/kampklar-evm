@@ -1,6 +1,6 @@
-// A single match as a card on the home page dashboard: "Siste kamp" with the score, or
-// "Neste kamp" with a VS badge. A game past kickoff + 2 h without a result shows "?" and,
-// for the admin, a pencil that opens the result form in the card.
+// A single match as a card on the home page dashboard: "Siste kamp" with the score,
+// "Neste kamp" with a VS badge, or "Resultat mangler" for a game past kickoff + 2 h without a
+// result - a "?" badge and, for the admin, a pencil that opens the result form in the card.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminMode } from "../lib/adminMode";
@@ -14,9 +14,11 @@ import type { Match, Team } from "../types/firestore";
 interface Props {
   match: Match;
   teams: Map<string, Team>;
-  kind: "last" | "next";
+  kind: "last" | "next" | "missing";
   highlightTeamId?: string;
 }
+
+const TITLES = { last: "Siste kamp", next: "Neste kamp", missing: "Resultat mangler" } as const;
 
 export function MatchCard({ match, teams, kind, highlightTeamId }: Props) {
   const { active: adminActive } = useAdminMode();
@@ -24,7 +26,7 @@ export function MatchCard({ match, teams, kind, highlightTeamId }: Props) {
   const finished = match.status === "FINISHED";
   const missing = isResultMissing(match);
   const editable = missing && adminActive;
-  const title = kind === "last" ? "Siste kamp" : "Neste kamp";
+  const title = TITLES[kind];
 
   const team = (teamId: string, side: "home" | "away") => (
     <Link

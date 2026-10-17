@@ -3,6 +3,7 @@ import { FavoriteButton } from "../components/FavoriteButton";
 import { MatchCard } from "../components/MatchCard";
 import { StandingsTable } from "../components/StandingsTable";
 import { LoadError, Loading } from "../components/Status";
+import { isResultMissing } from "../lib/matches";
 import { useFavorites } from "../lib/useFavorites";
 import { useGroupMatches, useGroupsForTeam, useTeams } from "../lib/useFirestore";
 import { SUPPORTED_FAVORITE_TEAMS, type FavoriteTeam } from "../types/team";
@@ -73,7 +74,10 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
 
   const teamMatches = matches.data.filter((m) => m.homeTeamId === team.id || m.awayTeamId === team.id);
   const lastResult = teamMatches.filter((m) => m.status === "FINISHED").at(-1);
-  const nextMatch = teamMatches.find((m) => m.status === "SCHEDULED");
+  // A played game still waiting for its result gets its own card, so "Neste kamp" is always
+  // a game that hasn't been played yet.
+  const missingResults = teamMatches.filter((m) => isResultMissing(m));
+  const nextMatch = teamMatches.find((m) => m.status === "SCHEDULED" && !isResultMissing(m));
   const playedCount = teamMatches.filter((m) => m.status === "FINISHED").length;
 
   const headingId = `team-card-${team.id}`;
@@ -113,10 +117,13 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
             <StandingsTable group={group} teams={teams} highlightTeamIds={[team.id]} variant="dash" />
           </section>
 
-          {(lastResult || nextMatch) && (
+          {(lastResult || missingResults.length > 0 || nextMatch) && (
             <>
               <h3 className="dash-section-title">Kamper</h3>
               {lastResult && <MatchCard match={lastResult} teams={teams} kind="last" highlightTeamId={team.id} />}
+              {missingResults.map((m) => (
+                <MatchCard key={m.id} match={m} teams={teams} kind="missing" highlightTeamId={team.id} />
+              ))}
               {nextMatch && <MatchCard match={nextMatch} teams={teams} kind="next" highlightTeamId={team.id} />}
             </>
           )}
