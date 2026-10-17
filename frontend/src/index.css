@@ -1,29 +1,40 @@
 :root {
-  --bg: #f6f7f9;
+  --bg: #eef1f2;
   --surface: #ffffff;
-  --text: #16181d;
-  --muted: #5d6573;
-  --border: #dfe3e8;
-  --accent: #c8102e;
-  --accent-soft: #fbe9ec;
-  --highlight: #fff4d6;
-  --link: #0b4fb3;
-  --radius: 10px;
+  --text: #0a1218;
+  --muted: #586b75;
+  --border: #d8e0e3;
+  --accent: #c8202f;
+  --accent-soft: #fbe8ea;
+  --highlight: #fff3d1;
+  --link: #14336f;
+  --ink: #04080c;
+  --radius: 14px;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #111318;
-    --surface: #1a1d24;
-    --text: #e9ebef;
-    --muted: #9aa3b2;
-    --border: #2c313b;
-    --accent: #ff5c6f;
-    --accent-soft: #3a1d23;
-    --highlight: #3a3220;
-    --link: #8ab4ff;
+    --bg: #05090d;
+    --surface: #0d151b;
+    --text: #e8eef0;
+    --muted: #8fa4ae;
+    --border: #1c2a32;
+    --accent: #dc3a37;
+    --accent-soft: #2c1517;
+    --highlight: #2e2a18;
+    --link: #8fb4e3;
     color-scheme: dark;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 
@@ -35,7 +46,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -50,14 +61,32 @@ a:hover {
 }
 
 h1 {
-  font-size: 1.9rem;
-  line-height: 1.2;
+  font-size: clamp(2rem, 5vw, 2.75rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.035em;
   margin: 1.5rem 0 0.5rem;
 }
 
 h2 {
-  font-size: 1.2rem;
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
   margin: 0 0 0.75rem;
+}
+
+.page-section-title {
+  margin: 2.5rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  scroll-margin-top: 1rem;
+}
+
+#mesterskapene {
+  scroll-margin-top: 1rem;
 }
 
 h3 {
@@ -88,9 +117,9 @@ h3 {
 
 .eyebrow {
   margin: 1.5rem 0 0;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--accent);
 }
@@ -114,23 +143,47 @@ h3 {
 
 /* Header / footer */
 .site-header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
+  position: relative;
+  z-index: 10;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* Always dark, so the tokens children use are redefined for this scope. */
+  --text: #e8eef0;
+  --muted: #9db0b9;
+  --border: rgba(255, 255, 255, 0.18);
+  --surface: rgba(255, 255, 255, 0.08);
+  --link: #9cc0ee;
+  --accent-soft: rgba(220, 58, 55, 0.2);
+  color: var(--text);
+}
+
+/* On the landing page the header floats over the hero photo. */
+.site-header.is-overlay {
+  position: absolute;
+  inset: 0 0 auto 0;
+  background: linear-gradient(180deg, rgba(4, 8, 12, 0.6), rgba(4, 8, 12, 0));
+  border-bottom: none;
 }
 
 .site-header-inner {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding-top: 0.9rem;
-  padding-bottom: 0.9rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .brand {
-  font-weight: 800;
-  font-size: 1.15rem;
-  color: var(--text);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.brand:hover {
+  text-decoration: none;
 }
 
 .brand-accent {
@@ -138,13 +191,129 @@ h3 {
 }
 
 .header-note {
-  font-size: 0.85rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Landing page hero */
+.hero {
+  position: relative;
+  isolation: isolate;
+  background: var(--ink);
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 62% 25%;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    linear-gradient(180deg, rgba(4, 8, 12, 0) 35%, rgba(4, 8, 12, 0.92) 100%),
+    linear-gradient(90deg, rgba(4, 8, 12, 0.55) 0%, rgba(4, 8, 12, 0) 55%);
+}
+
+.hero-inner {
+  min-height: clamp(460px, 80vh, 700px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 1.25rem;
+  padding-top: 5rem;
+  padding-bottom: 2rem;
+}
+
+.hero-label {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(3.4rem, 14vw, 8.5rem);
+  line-height: 0.88;
+  letter-spacing: -0.05em;
+  color: #fff;
+}
+
+.hero-dot {
+  color: var(--accent);
+}
+
+.hero-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.25rem 2rem;
+}
+
+.hero-lead {
+  margin: 0;
+  max-width: 32ch;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.hero-cta {
+  display: inline-block;
+  padding: 0.7rem 1.3rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  border: 1px solid transparent;
+}
+
+.hero-cta:hover {
+  text-decoration: none;
+}
+
+.hero-cta-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.hero-cta-ghost {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(6px);
+}
+
+.hero-cta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .site-footer {
-  margin-top: 3rem;
+  margin-top: 4rem;
+  padding-top: 1.25rem;
   padding-bottom: 2rem;
-  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
 }
 
 .section {
@@ -174,7 +343,7 @@ h3 {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1rem;
+  padding: 1.25rem;
   min-width: 0;
 }
 
@@ -269,8 +438,10 @@ table {
 
 th {
   text-align: left;
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   color: var(--muted);
   border-bottom: 1px solid var(--border);
   padding: 0.35rem 0.4rem;
@@ -429,8 +600,8 @@ tr.highlight td {
 .button {
   font: inherit;
   font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 0.5rem 1.1rem;
+  border-radius: 999px;
   border: 1px solid var(--accent);
   background: var(--accent);
   color: #fff;

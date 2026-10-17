@@ -16,7 +16,9 @@ export function HomePage() {
 
   return (
     <>
-      <h1>Mine lag</h1>
+      <h2 className="page-section-title" id="mine-lag">
+        Mine lag
+      </h2>
       {teams.error && <LoadError error={teams.error} />}
 
       {followed.length === 0 ? (
@@ -43,7 +45,7 @@ export function HomePage() {
         </section>
       )}
 
-      <section className="section">
+      <section className="section" id="mesterskapene">
         <h2>Mesterskapene</h2>
         <div className="card-grid">
           <Link to="/em" className="card link-card">
