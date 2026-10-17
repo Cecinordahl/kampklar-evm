@@ -74,6 +74,7 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
   const teamMatches = matches.data.filter((m) => m.homeTeamId === team.id || m.awayTeamId === team.id);
   const lastResult = teamMatches.filter((m) => m.status === "FINISHED").at(-1);
   const nextMatch = teamMatches.find((m) => m.status === "SCHEDULED");
+  const playedCount = teamMatches.filter((m) => m.status === "FINISHED").length;
 
   const headingId = `team-card-${team.id}`;
 
@@ -107,11 +108,7 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
           <section className="dash-panel" aria-label="Tabell">
             <div className="dash-panel-head">
               <h3>Tabell</h3>
-              <span className="dash-dots" aria-hidden="true">
-                <i className="dash-dots-line" />
-                <i />
-                <i />
-              </span>
+              <GamesPlayed played={playedCount} total={teamMatches.length} />
             </div>
             <StandingsTable group={group} teams={teams} highlightTeamIds={[team.id]} variant="dash" />
           </section>
@@ -126,5 +123,18 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
         </>
       )}
     </article>
+  );
+}
+
+/** One dot per group game for the team: lit for each one played. */
+function GamesPlayed({ played, total }: { played: number; total: number }) {
+  if (total === 0) return null;
+  const label = `${played} av ${total} kamper spilt`;
+  return (
+    <span className="dash-dots" role="img" aria-label={label} title={label}>
+      {Array.from({ length: total }, (_, i) => (
+        <i key={i} className={i < played ? "is-played" : undefined} />
+      ))}
+    </span>
   );
 }
