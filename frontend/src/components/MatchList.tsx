@@ -32,20 +32,24 @@ export function MatchRow(props: { match: Match } & Omit<Props, "matches">) {
   const { active: adminActive } = useAdminMode();
   const [formOpen, setFormOpen] = useState(false);
   const missing = isResultMissing(props.match);
+  const editable = missing && adminActive;
   return (
-    <li className={`match${missing ? " is-missing" : ""}`}>
+    <li className={`match${missing ? " is-missing" : ""}${editable ? " has-edit-icon" : ""}`}>
       <MatchRowContent {...props} missingResult={missing} />
-      {missing &&
-        (adminActive ? (
-          <p className="match-missing-note">
-            <button type="button" className="link-button" aria-expanded={formOpen} onClick={() => setFormOpen(!formOpen)}>
-              ✏️ {formOpen ? "Lukk" : "Legg til resultat"}
-            </button>
-          </p>
-        ) : (
-          <MissingResultNote match={props.match} teams={props.teams} />
-        ))}
-      {adminActive && formOpen && (
+      {editable && (
+        <button
+          type="button"
+          className="match-edit-icon"
+          aria-expanded={formOpen}
+          aria-label={formOpen ? "Lukk" : "Legg til resultat"}
+          title={formOpen ? "Lukk" : "Legg til resultat"}
+          onClick={() => setFormOpen(!formOpen)}
+        >
+          {formOpen ? "✕" : "✏️"}
+        </button>
+      )}
+      {missing && !adminActive && <MissingResultNote match={props.match} teams={props.teams} />}
+      {editable && formOpen && (
         <div className="match-inline-form">
           <MatchForm match={props.match} suggestion={undefined} teams={props.teams} onSaved={() => setFormOpen(false)} />
         </div>
