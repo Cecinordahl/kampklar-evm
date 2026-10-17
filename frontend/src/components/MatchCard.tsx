@@ -1,6 +1,6 @@
 // A single match as a card on the home page dashboard: "Siste kamp" with the score,
 // "Neste kamp" with a VS badge, or "Resultat mangler" for a game past kickoff + 2 h without a
-// result - a "?" badge and, for the admin, a pencil that opens the result form in the card.
+// result - a red VS badge and, for the admin, a pencil that opens the result form in the card.
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAdminMode } from "../lib/adminMode";
@@ -76,7 +76,7 @@ export function MatchCard({ match, teams, kind, highlightTeamId }: Props) {
             {match.awayGoals}
           </span>
         ) : (
-          <span className="mc-vs">{missing ? "?" : "VS"}</span>
+          <span className="mc-vs">VS</span>
         )}
         <Flag teamId={match.awayTeamId} size="lg" />
         {team(match.awayTeamId, "away")}
