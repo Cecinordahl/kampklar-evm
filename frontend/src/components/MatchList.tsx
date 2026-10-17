@@ -1,6 +1,9 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useAdminMode } from "../lib/adminMode";
 import { formatDate, formatTime } from "../lib/format";
 import { isResultMissing } from "../lib/matches";
+import { MatchForm } from "./admin/MatchForm";
 import type { Match, Team } from "../types/firestore";
 
 // Where "Si fra" sends visitors; the button is hidden when it isn't configured.
@@ -26,11 +29,27 @@ export function MatchList({ matches, teams, highlightTeamIds = [] }: Props) {
 }
 
 export function MatchRow(props: { match: Match } & Omit<Props, "matches">) {
+  const { active: adminActive } = useAdminMode();
+  const [formOpen, setFormOpen] = useState(false);
   const missing = isResultMissing(props.match);
   return (
     <li className={`match${missing ? " is-missing" : ""}`}>
       <MatchRowContent {...props} missingResult={missing} />
-      {missing && <MissingResultNote match={props.match} teams={props.teams} />}
+      {missing &&
+        (adminActive ? (
+          <p className="match-missing-note">
+            <button type="button" className="link-button" aria-expanded={formOpen} onClick={() => setFormOpen(!formOpen)}>
+              ✏️ {formOpen ? "Lukk" : "Legg til resultat"}
+            </button>
+          </p>
+        ) : (
+          <MissingResultNote match={props.match} teams={props.teams} />
+        ))}
+      {adminActive && formOpen && (
+        <div className="match-inline-form">
+          <MatchForm match={props.match} suggestion={undefined} teams={props.teams} onSaved={() => setFormOpen(false)} />
+        </div>
+      )}
     </li>
   );
 }

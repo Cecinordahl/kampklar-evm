@@ -398,6 +398,11 @@ tr.highlight td {
   color: var(--muted);
 }
 
+.match-inline-form {
+  grid-column: 1 / -1;
+  padding-bottom: 0.5rem;
+}
+
 .match-missing-ping {
   font-weight: 600;
   color: var(--link);
