@@ -59,7 +59,7 @@ export function MatchRow(props: { match: Match } & Omit<Props, "matches">) {
 }
 
 /** The public "result not updated" line, with a prefilled email to the admin. */
-function MissingResultNote({ match, teams }: { match: Match; teams: Map<string, Team> }) {
+export function MissingResultNote({ match, teams }: { match: Match; teams: Map<string, Team> }) {
   const title = `${teams.get(match.homeTeamId)?.name ?? match.homeTeamId} – ${teams.get(match.awayTeamId)?.name ?? match.awayTeamId}`;
   const subject = `Resultat mangler: ${title}`;
   const body = `Hei! Resultatet for ${title} (${formatDate(match.kickoff)} ${formatTime(match.kickoff)}) er ikke oppdatert på Kampklar.`;

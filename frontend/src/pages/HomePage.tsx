@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
-import { MatchRow } from "../components/MatchList";
+import { MatchCard } from "../components/MatchCard";
 import { StandingsTable } from "../components/StandingsTable";
 import { LoadError, Loading } from "../components/Status";
 import { useFavorites } from "../lib/useFavorites";
@@ -75,12 +75,25 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
   const lastResult = teamMatches.filter((m) => m.status === "FINISHED").at(-1);
   const nextMatch = teamMatches.find((m) => m.status === "SCHEDULED");
 
+  const headingId = `team-card-${team.id}`;
+
   return (
-    <article className="card">
-      <header className="card-header">
-        <h2>
-          <Link to={`/lag/${team.id}`}>{team.name}</Link>
-        </h2>
+    <article className="dash-card" aria-labelledby={headingId}>
+      <header className="dash-header">
+        <div className="dash-badge" aria-hidden="true">
+          <span className="dash-badge-mark" />
+          <span className="dash-badge-text">Nations League</span>
+        </div>
+        <div className="dash-titles">
+          {group && (
+            <p className="dash-eyebrow">
+              League {group.name.charAt(0)} • <Link to={`/gruppe/${group.id}`}>Gruppe {group.name}</Link>
+            </p>
+          )}
+          <h2 id={headingId}>
+            <Link to={`/lag/${team.id}`}>{team.name}</Link>
+          </h2>
+        </div>
         <FavoriteButton teamId={team.id} teamName={team.name} />
       </header>
 
@@ -92,32 +105,25 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
         <p className="muted">Ingen gruppe registrert ennå.</p>
       ) : (
         <>
-          <p className="card-subtitle">
-            <Link to={`/gruppe/${group.id}`}>Gruppe {group.name}</Link>
-          </p>
-          <StandingsTable group={group} teams={teams} highlightTeamIds={[team.id]} />
-          <dl className="fixtures-summary">
-            {lastResult && (
-              <div>
-                <dt>Siste kamp</dt>
-                <dd>
-                  <ol className="match-list">
-                    <MatchRow match={lastResult} teams={teams} highlightTeamIds={[team.id]} />
-                  </ol>
-                </dd>
-              </div>
-            )}
-            {nextMatch && (
-              <div>
-                <dt>Neste kamp</dt>
-                <dd>
-                  <ol className="match-list">
-                    <MatchRow match={nextMatch} teams={teams} highlightTeamIds={[team.id]} />
-                  </ol>
-                </dd>
-              </div>
-            )}
-          </dl>
+          <section className="dash-panel" aria-label="Tabell">
+            <div className="dash-panel-head">
+              <h3>Tabell</h3>
+              <span className="dash-dots" aria-hidden="true">
+                <i className="dash-dots-line" />
+                <i />
+                <i />
+              </span>
+            </div>
+            <StandingsTable group={group} teams={teams} highlightTeamIds={[team.id]} variant="dash" />
+          </section>
+
+          {(lastResult || nextMatch) && (
+            <>
+              <h3 className="dash-section-title">Kamper</h3>
+              {lastResult && <MatchCard match={lastResult} teams={teams} kind="last" highlightTeamId={team.id} />}
+              {nextMatch && <MatchCard match={nextMatch} teams={teams} kind="next" highlightTeamId={team.id} />}
+            </>
+          )}
         </>
       )}
     </article>
