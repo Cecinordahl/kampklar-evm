@@ -68,6 +68,8 @@ export function MatchForm({
   const [awayGoalsByPlayer, setAwayGoalsByPlayer] = useState<Record<string, number>>(() =>
     tally(initial.awayScorerIds),
   );
+  // Squads are optional: folded away unless there is already a lineup to review.
+  const [showSquads, setShowSquads] = useState(initial.homeLineup.length > 0 || initial.awayLineup.length > 0);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
@@ -152,22 +154,35 @@ export function MatchForm({
             <Stepper label={teams.get(match.awayTeamId)?.name ?? "Borte"} value={awayGoals} onChange={setAwayGoals} />
           </div>
 
-          <SquadPicker
-            label={`Tropp ${teams.get(match.homeTeamId)?.name ?? ""}`}
-            squad={homeSquad}
-            lineup={homeLineup}
-            goalsByPlayer={homeGoalsByPlayer}
-            onToggle={(id, playing) => togglePlayer("home", id, playing)}
-            onGoalsChange={(id, count) => setHomeGoalsByPlayer((prev) => ({ ...prev, [id]: count }))}
-          />
-          <SquadPicker
-            label={`Tropp ${teams.get(match.awayTeamId)?.name ?? ""}`}
-            squad={awaySquad}
-            lineup={awayLineup}
-            goalsByPlayer={awayGoalsByPlayer}
-            onToggle={(id, playing) => togglePlayer("away", id, playing)}
-            onGoalsChange={(id, count) => setAwayGoalsByPlayer((prev) => ({ ...prev, [id]: count }))}
-          />
+          <button
+            type="button"
+            className="link-button admin-squad-toggle"
+            aria-expanded={showSquads}
+            onClick={() => setShowSquads(!showSquads)}
+          >
+            {showSquads ? "Skjul tropp" : "＋ Legg til tropp"}
+          </button>
+
+          {showSquads && (
+            <>
+              <SquadPicker
+                label={`Tropp ${teams.get(match.homeTeamId)?.name ?? ""}`}
+                squad={homeSquad}
+                lineup={homeLineup}
+                goalsByPlayer={homeGoalsByPlayer}
+                onToggle={(id, playing) => togglePlayer("home", id, playing)}
+                onGoalsChange={(id, count) => setHomeGoalsByPlayer((prev) => ({ ...prev, [id]: count }))}
+              />
+              <SquadPicker
+                label={`Tropp ${teams.get(match.awayTeamId)?.name ?? ""}`}
+                squad={awaySquad}
+                lineup={awayLineup}
+                goalsByPlayer={awayGoalsByPlayer}
+                onToggle={(id, playing) => togglePlayer("away", id, playing)}
+                onGoalsChange={(id, count) => setAwayGoalsByPlayer((prev) => ({ ...prev, [id]: count }))}
+              />
+            </>
+          )}
         </>
       )}
 
