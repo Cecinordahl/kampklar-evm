@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { Hero } from "./Hero";
+import { ThemeToggle } from "./ThemeToggle";
 import { AdminBar } from "./admin/AdminBar";
 import { useAdminMode } from "../lib/adminMode";
 
@@ -13,7 +14,10 @@ export function Layout() {
           <Link to="/" className="brand">
             Kampklar <span className="brand-accent">EVM</span>
           </Link>
-          {user ? <AdminBar /> : !home && <span className="muted header-note">Nations League 2026/27</span>}
+          <div className="header-end">
+            {user ? <AdminBar /> : !home && <span className="muted header-note">Nations League 2026/27</span>}
+            <ThemeToggle />
+          </div>
         </div>
       </header>
       {home && <Hero />}
