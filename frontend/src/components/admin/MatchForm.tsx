@@ -44,10 +44,13 @@ export function MatchForm({
   match,
   suggestion,
   teams,
+  onSaved,
 }: {
   match: Match;
   suggestion: ResultSuggestion | undefined;
   teams: Map<string, Team>;
+  /** Called after a successful save; the list uses it to close the form. */
+  onSaved?: () => void;
 }) {
   const homeSquad = useSquad(match.homeTeamId);
   const awaySquad = useSquad(match.awayTeamId);
@@ -103,6 +106,7 @@ export function MatchForm({
     try {
       await saveMatch(match.id, body);
       setSaved(true);
+      onSaved?.();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Ukjent feil.");
     } finally {
