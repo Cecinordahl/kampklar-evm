@@ -83,7 +83,7 @@ export function StandingsTable({ group, teams, highlightTeamIds = [], variant = 
       {table}
       <p className="qual-legend">
         <span className="qual-legend-bar" aria-hidden="true" />
-        Topp {qualifyRows}: kvartfinale
+        Topp {qualifyRows}: Nations League-kvartfinale
       </p>
     </>
   );
