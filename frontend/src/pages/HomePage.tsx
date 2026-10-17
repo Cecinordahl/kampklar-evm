@@ -80,9 +80,8 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
   return (
     <article className="dash-card" aria-labelledby={headingId}>
       <header className="dash-header">
-        <div className="dash-badge" aria-hidden="true">
-          <span className="dash-badge-mark" />
-          <span className="dash-badge-text">Nations League</span>
+        <div className="dash-badge">
+          <img src="/nations-league.webp" alt="UEFA Nations League" width="192" height="300" />
         </div>
         <div className="dash-titles">
           {group && (

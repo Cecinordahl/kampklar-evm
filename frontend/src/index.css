@@ -1545,27 +1545,16 @@ tr.highlight td {
   width: 3.4rem;
   height: 3.4rem;
   border-radius: 14px;
+  padding: 0.3rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.dash-badge-mark {
-  width: 1.35rem;
-  height: 1.35rem;
-  border-radius: 6px;
-  background: conic-gradient(from 45deg, #e8463a, #f2b33d, #3fb36b, #2f8fe6, #8b5cf6, #e8463a);
-  transform: rotate(45deg) scale(0.8);
-}
-
-.dash-badge-text {
-  font-size: 0.42rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  text-align: center;
-  color: #dfe6ee;
+.dash-badge img {
+  display: block;
+  width: auto;
+  height: 2.75rem;
 }
 
 .dash-eyebrow {
@@ -1721,7 +1710,7 @@ tr.highlight td {
 
 .standings-dash .qual-col,
 .standings-dash .qual-cell {
-  width: 0.9rem;
+  width: 0.5rem;
   padding: 0;
   border: none;
 }
@@ -1746,16 +1735,21 @@ tr.highlight td {
   box-shadow: 0 0 8px rgba(77, 163, 255, 0.8);
 }
 
-.qual-label {
-  display: inline-block;
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-size: 0.55rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(120, 175, 255, 0.85);
-  white-space: nowrap;
+.qual-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0.5rem 0 0.2rem 0.45rem;
+  font-size: 0.7rem;
+  color: var(--muted);
+}
+
+.qual-legend-bar {
+  width: 2px;
+  height: 0.85rem;
+  border-radius: 2px;
+  background: #4da3ff;
+  box-shadow: 0 0 6px rgba(77, 163, 255, 0.8);
 }
 
 .dash-section-title {

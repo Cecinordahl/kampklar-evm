@@ -17,7 +17,7 @@ const QUARTER_FINAL_PLACES = 2;
 export function StandingsTable({ group, teams, highlightTeamIds = [], variant = "default" }: Props) {
   const dash = variant === "dash";
   const qualifyRows = Math.min(QUARTER_FINAL_PLACES, group.standings.length);
-  return (
+  const table = (
     <table className={`standings${dash ? " standings-dash" : ""}`}>
       <caption className="visually-hidden">Tabell {group.name}</caption>
       <thead>
@@ -50,9 +50,7 @@ export function StandingsTable({ group, teams, highlightTeamIds = [], variant = 
           >
             {dash &&
               (i === 0 ? (
-                <td className="qual-cell" rowSpan={qualifyRows}>
-                  <span className="qual-label">Kvartfinale</span>
-                </td>
+                <td className="qual-cell" rowSpan={qualifyRows} />
               ) : i >= qualifyRows ? (
                 <td className="qual-cell qual-empty" />
               ) : null)}
@@ -78,5 +76,15 @@ export function StandingsTable({ group, teams, highlightTeamIds = [], variant = 
         ))}
       </tbody>
     </table>
+  );
+  if (!dash || qualifyRows === 0) return table;
+  return (
+    <>
+      {table}
+      <p className="qual-legend">
+        <span className="qual-legend-bar" aria-hidden="true" />
+        Topp {qualifyRows}: kvartfinale
+      </p>
+    </>
   );
 }
