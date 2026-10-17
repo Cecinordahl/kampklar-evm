@@ -22,6 +22,7 @@ interface Props {
 export function EditableMatchList({ matches, teams, highlightTeamIds = [], scopeLabel }: Props) {
   const { ready } = useAdminMode();
   const [openMatchId, setOpenMatchId] = useState<string | null>(null);
+  const [justSavedId, setJustSavedId] = useState<string | null>(null);
   const [suggestions, setSuggestions] = useState<Map<string, ResultSuggestion>>(new Map());
   const [fetching, setFetching] = useState<string | null>(null);
   const [savingAll, setSavingAll] = useState(false);
@@ -84,6 +85,17 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
     setSavingAll(false);
   }
 
+  /** Closes the form after a save, so the row shows the stored result like the public page. */
+  function handleSaved(matchId: string) {
+    setOpenMatchId(null);
+    setJustSavedId(matchId);
+    setSuggestions((prev) => {
+      const next = new Map(prev);
+      next.delete(matchId);
+      return next;
+    });
+  }
+
   if (matches.length === 0) {
     return <p className="muted">Ingen kamper registrert ennå.</p>;
   }
@@ -132,6 +144,7 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
           const suggestion = suggestions.get(m.id);
           const open = openMatchId === m.id;
           const isMissing = isResultMissing(m, now);
+          const finished = m.status === "FINISHED";
           return (
             <li key={m.id} className={`editable-match${isMissing ? " is-missing" : ""}`}>
               <div className="match">
@@ -140,37 +153,62 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
               {(suggestion || matchDayReached(m)) && (
                 <div className="match-admin-actions">
                   {isMissing && !suggestion && <span className="admin-missing-tag">Mangler resultat</span>}
+                  {justSavedId === m.id && !open && (
+                    <span className="admin-success" role="status">
+                      ✓ Lagret
+                    </span>
+                  )}
                   {suggestion && (
                     <span className="admin-ai-tag">
                       AI: {suggestion.homeGoals}–{suggestion.awayGoals}
                       {suggestion.warnings.length > 0 ? " ⚠" : ""}
                     </span>
                   )}
-                  {matchDayReached(m) && (
+                  {finished ? (
+                    // A saved result only needs correcting now and then: one small edit button.
                     <button
                       type="button"
                       className="link-button"
                       aria-expanded={open}
                       onClick={() => setOpenMatchId(open ? null : m.id)}
                     >
-                      ✏️ {open ? "Lukk" : "Manuelt"}
+                      ✏️ {open ? "Lukk" : "Endre"}
                     </button>
-                  )}
-                  {played(m) && (
-                    <button
-                      type="button"
-                      className="link-button"
-                      disabled={!ready || busy}
-                      title={notReady}
-                      onClick={() => research([m], `Henter ${name(m.homeTeamId)} – ${name(m.awayTeamId)} med AI`)}
-                    >
-                      ✨ AI
-                    </button>
+                  ) : (
+                    <>
+                      {matchDayReached(m) && (
+                        <button
+                          type="button"
+                          className="link-button"
+                          aria-expanded={open}
+                          onClick={() => setOpenMatchId(open ? null : m.id)}
+                        >
+                          ✏️ {open ? "Lukk" : "Manuelt"}
+                        </button>
+                      )}
+                      {played(m) && (
+                        <button
+                          type="button"
+                          className="link-button"
+                          disabled={!ready || busy}
+                          title={notReady}
+                          onClick={() => research([m], `Henter ${name(m.homeTeamId)} – ${name(m.awayTeamId)} med AI`)}
+                        >
+                          ✨ AI
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               )}
               {open && (
-                <MatchForm key={`${m.id}-${suggestion ? "ai" : "stored"}`} match={m} suggestion={suggestion} teams={teams} />
+                <MatchForm
+                  key={`${m.id}-${suggestion ? "ai" : "stored"}`}
+                  match={m}
+                  suggestion={suggestion}
+                  teams={teams}
+                  onSaved={() => handleSaved(m.id)}
+                />
               )}
             </li>
           );
