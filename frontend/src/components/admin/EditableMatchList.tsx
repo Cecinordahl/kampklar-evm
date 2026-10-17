@@ -5,6 +5,7 @@ import { useState } from "react";
 import { saveMatch, suggestResults, type ResultSuggestion } from "../../lib/adminApi";
 import { useAdminMode } from "../../lib/adminMode";
 import { daysBetween } from "../../lib/format";
+import { isResultMissing } from "../../lib/matches";
 import { MatchRowContent } from "../MatchList";
 import { LongTaskOverlay } from "./LongTaskOverlay";
 import { MatchForm, saveRequest } from "./MatchForm";
@@ -31,7 +32,7 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
   const played = (m: Match) => m.kickoff < now;
   // Nothing to enter before match day (Norwegian time): lineups and results don't exist yet.
   const matchDayReached = (m: Match) => daysBetween(now, m.kickoff) <= 0;
-  const missing = matches.filter((m) => played(m) && m.status !== "FINISHED");
+  const missing = matches.filter((m) => isResultMissing(m, now));
   const name = (teamId: string) => teams.get(teamId)?.name ?? teamId;
   const busy = fetching !== null || savingAll;
 
@@ -130,13 +131,15 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
         {matches.map((m) => {
           const suggestion = suggestions.get(m.id);
           const open = openMatchId === m.id;
+          const isMissing = isResultMissing(m, now);
           return (
-            <li key={m.id} className="editable-match">
+            <li key={m.id} className={`editable-match${isMissing ? " is-missing" : ""}`}>
               <div className="match">
-                <MatchRowContent match={m} teams={teams} highlightTeamIds={highlightTeamIds} />
+                <MatchRowContent match={m} teams={teams} highlightTeamIds={highlightTeamIds} missingResult={isMissing} />
               </div>
               {(suggestion || matchDayReached(m)) && (
                 <div className="match-admin-actions">
+                  {isMissing && !suggestion && <span className="admin-missing-tag">Mangler resultat</span>}
                   {suggestion && (
                     <span className="admin-ai-tag">
                       AI: {suggestion.homeGoals}–{suggestion.awayGoals}

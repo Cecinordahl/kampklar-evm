@@ -144,26 +144,8 @@ export function MatchForm({
       {status === "FINISHED" && (
         <>
           <div className="admin-score-row">
-            <label className="admin-field admin-field-narrow">
-              {teams.get(match.homeTeamId)?.name ?? "Hjemme"}
-              <input
-                type="number"
-                min={0}
-                value={homeGoals}
-                onChange={(e) => setHomeGoals(Number(e.target.value))}
-                required
-              />
-            </label>
-            <label className="admin-field admin-field-narrow">
-              {teams.get(match.awayTeamId)?.name ?? "Borte"}
-              <input
-                type="number"
-                min={0}
-                value={awayGoals}
-                onChange={(e) => setAwayGoals(Number(e.target.value))}
-                required
-              />
-            </label>
+            <Stepper label={teams.get(match.homeTeamId)?.name ?? "Hjemme"} value={homeGoals} onChange={setHomeGoals} />
+            <Stepper label={teams.get(match.awayTeamId)?.name ?? "Borte"} value={awayGoals} onChange={setAwayGoals} />
           </div>
 
           <SquadPicker
@@ -235,20 +217,62 @@ function SquadPicker({
                 {p.name}
               </label>
               {lineup.has(p.id) && (
-                <label className="admin-goals-input">
-                  Mål
-                  <input
-                    type="number"
-                    min={0}
-                    value={goalsByPlayer[p.id] ?? 0}
-                    onChange={(e) => onGoalsChange(p.id, Number(e.target.value))}
-                  />
-                </label>
+                <Stepper
+                  label="Mål"
+                  name={p.name}
+                  small
+                  value={goalsByPlayer[p.id] ?? 0}
+                  onChange={(count) => onGoalsChange(p.id, count)}
+                />
               )}
             </li>
           ))}
         </ul>
       )}
     </fieldset>
+  );
+}
+
+/** A tap-friendly − value + counter, so goals never need typing. Never goes below zero. */
+function Stepper({
+  label,
+  value,
+  onChange,
+  name = label,
+  small = false,
+}: {
+  label: string;
+  /** Who the goals belong to, for screen readers; defaults to the label. */
+  name?: string;
+  value: number;
+  onChange: (value: number) => void;
+  small?: boolean;
+}) {
+  return (
+    <div className={`stepper${small ? " stepper-small" : ""}`} role="group" aria-label={name}>
+      <span className="stepper-label">{label}</span>
+      <div className="stepper-controls">
+        <button
+          type="button"
+          className="stepper-button"
+          aria-label={`Ett mål mindre, ${name}`}
+          disabled={value <= 0}
+          onClick={() => onChange(Math.max(0, value - 1))}
+        >
+          −
+        </button>
+        <output className="stepper-value" aria-live="polite">
+          {value}
+        </output>
+        <button
+          type="button"
+          className="stepper-button"
+          aria-label={`Ett mål mer, ${name}`}
+          onClick={() => onChange(value + 1)}
+        >
+          +
+        </button>
+      </div>
+    </div>
   );
 }

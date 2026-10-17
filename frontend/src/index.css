@@ -378,6 +378,32 @@ tr.highlight td {
   font-weight: 700;
 }
 
+/* Public view: a game past kickoff + 2 h with no result */
+.match.is-missing {
+  background: var(--highlight);
+  border-radius: 6px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.match-missing-note {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem 0.75rem;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.match-missing-ping {
+  font-weight: 600;
+  color: var(--link);
+  padding: 0.35rem 0;
+}
+
 .highlight-team {
   font-weight: 700;
 }
@@ -453,8 +479,7 @@ tr.highlight td {
 
 .admin-field input,
 .admin-field select,
-.admin-field textarea,
-.admin-goals-input input {
+.admin-field textarea {
   font: inherit;
   font-weight: 400;
   color: var(--text);
@@ -473,7 +498,78 @@ tr.highlight td {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: 1rem;
+  gap: 1rem 2rem;
+}
+
+/* Goal counter: − value + */
+.stepper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.stepper-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stepper-button {
+  font: inherit;
+  font-size: 1.4rem;
+  line-height: 1;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.stepper-button:active:not(:disabled) {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+.stepper-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.stepper-button:focus-visible {
+  outline: 2px solid var(--link);
+  outline-offset: 2px;
+}
+
+.stepper-value {
+  min-width: 2ch;
+  text-align: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.stepper-small {
+  flex-direction: row;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.8rem;
+}
+
+.stepper-small .stepper-button {
+  font-size: 1.1rem;
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.stepper-small .stepper-value {
+  font-size: 1rem;
 }
 
 .admin-match-title {
@@ -514,19 +610,6 @@ tr.highlight td {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-}
-
-.admin-goals-input {
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  font-size: 0.8rem;
-  color: var(--muted);
-}
-
-.admin-goals-input input {
-  width: 3.5rem;
-  padding: 0.2rem 0.4rem;
 }
 
 .admin-success {
@@ -984,6 +1067,29 @@ tr.highlight td {
 
 .match-admin-actions .admin-ai-tag {
   margin-left: 0;
+}
+
+/* Played matches with no result yet */
+.editable-match.is-missing {
+  background: var(--accent-soft);
+  box-shadow: inset 4px 0 0 var(--accent);
+  padding: 0 0.5rem 0 0.75rem;
+  border-radius: 6px;
+}
+
+.match-score.is-missing {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.admin-missing-tag {
+  margin-right: auto;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .editable-match .admin-match-form {
