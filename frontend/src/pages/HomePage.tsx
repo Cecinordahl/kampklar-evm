@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { AllResultsPanel } from "../components/admin/AllResultsPanel";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { MatchCard } from "../components/MatchCard";
 import { StandingsTable } from "../components/StandingsTable";
@@ -17,6 +18,7 @@ export function HomePage() {
 
   return (
     <>
+      <AllResultsPanel />
       <h2 className="page-section-title" id="mine-lag">
         Mine lag
       </h2>

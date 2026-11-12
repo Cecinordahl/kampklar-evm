@@ -108,6 +108,12 @@ export function useGroupsForTeam(teamId: string | undefined): Live<Group[]> {
   );
 }
 
+/** Every match in every group, sorted by kickoff. Pass false to skip the subscription. */
+export function useAllMatches(enabled = true): Live<Match[]> {
+  const live = useLiveQuery(enabled ? "matches-all" : null, () => query(collection(db, "matches")), toMatch);
+  return { ...live, data: [...live.data].sort((a, b) => a.kickoff.getTime() - b.kickoff.getTime()) };
+}
+
 export function useGroupMatches(groupId: string | undefined): Live<Match[]> {
   const live = useLiveQuery(
     groupId ? `matches-${groupId}` : null,
