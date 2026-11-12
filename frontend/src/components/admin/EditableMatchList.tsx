@@ -33,7 +33,9 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
   const played = (m: Match) => m.kickoff < now;
   // Nothing to enter before match day (Norwegian time): lineups and results don't exist yet.
   const matchDayReached = (m: Match) => daysBetween(now, m.kickoff) <= 0;
-  const missing = matches.filter((m) => isResultMissing(m, now));
+  // The bulk button covers every kicked-off game without a result; the AI simply finds nothing
+  // for a game that is still running.
+  const missing = matches.filter((m) => played(m) && m.status !== "FINISHED");
   const name = (teamId: string) => teams.get(teamId)?.name ?? teamId;
   const busy = fetching !== null || savingAll;
 
@@ -111,12 +113,12 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
           className="button button-secondary button-small"
           disabled={!ready || busy || missing.length === 0}
           title={notReady}
-          onClick={() => research(missing, `Henter manglende resultater for ${scopeLabel}`)}
+          onClick={() => research(missing, `Henter resultater for ${scopeLabel}`)}
         >
           ✨{" "}
           {missing.length === 0
             ? "Ingen manglende resultater"
-            : `Hent ${missing.length === 1 ? "manglende resultat" : `${missing.length} manglende resultater`} med AI`}
+            : `Hent ${missing.length === 1 ? "resultatet" : `alle ${missing.length} resultatene`} med AI`}
         </button>
         {suggestions.size > 0 && (
           <button type="button" className="button button-small" disabled={!ready || busy} onClick={handleSaveAll}>

@@ -2029,3 +2029,8 @@ tr.highlight td {
     width: 1.7rem;
   }
 }
+
+.section-more {
+  margin-top: 1rem;
+  font-weight: 600;
+}

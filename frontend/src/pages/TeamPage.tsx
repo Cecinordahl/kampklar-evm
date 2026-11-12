@@ -84,6 +84,11 @@ export function TeamPage() {
         ) : (
           <MatchList matches={teamMatches} teams={teams.data} highlightTeamIds={[teamId]} />
         )}
+        {group && (
+          <p className="section-more">
+            <Link to={`/gruppe/${group.id}`}>Se hele gruppe {group.name}: tabell og alle kamper →</Link>
+          </p>
+        )}
       </section>
 
       <TeamNews teamId={teamId} />
