@@ -172,9 +172,11 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
                       type="button"
                       className="link-button"
                       aria-expanded={open}
+                      aria-label={open ? "Lukk" : "Endre resultat"}
+                      title={open ? "Lukk" : "Endre resultat"}
                       onClick={() => setOpenMatchId(open ? null : m.id)}
                     >
-                      ✏️ {open ? "Lukk" : "Endre"}
+                      {open ? "✕" : "✏️"}
                     </button>
                   ) : (
                     <>
@@ -193,10 +195,11 @@ export function EditableMatchList({ matches, teams, highlightTeamIds = [], scope
                           type="button"
                           className="link-button"
                           disabled={!ready || busy}
-                          title={notReady}
+                          title={notReady ?? "Hent resultat med AI"}
+                          aria-label="Hent resultat med AI"
                           onClick={() => research([m], `Henter ${name(m.homeTeamId)} – ${name(m.awayTeamId)} med AI`)}
                         >
-                          ✨ AI
+                          ✨
                         </button>
                       )}
                     </>
