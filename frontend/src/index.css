@@ -2034,3 +2034,86 @@ tr.highlight td {
   margin-top: 1rem;
   font-weight: 600;
 }
+
+/* Nations League knockout stage */
+.ko-ties {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+
+.ko-tie {
+  border: 1px solid var(--border, rgba(127, 127, 127, 0.3));
+  border-radius: var(--radius);
+  padding: 0.75rem 0.9rem;
+}
+
+.ko-tie-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0 0 0.5rem;
+  font-weight: 600;
+}
+
+.ko-legs {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.ko-legs li {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.5rem;
+}
+
+.ko-leg-name {
+  font-weight: 600;
+  min-width: 4.2rem;
+}
+
+.ko-bracket {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.ko-bracket-semis {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+}
+
+.ko-semi,
+.ko-final {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  border: 1px solid var(--border, rgba(127, 127, 127, 0.3));
+  border-radius: var(--radius);
+  padding: 0.75rem;
+}
+
+.ko-final {
+  max-width: 18rem;
+  margin: 0 auto;
+}
+
+.ko-round {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.75;
+}
+
+.ko-slot {
+  font-weight: 600;
+}

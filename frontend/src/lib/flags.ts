@@ -2,6 +2,7 @@
 // are bundled (flag-icons, MIT); an unknown team gets the initials fallback in <Flag>.
 import be from "flag-icons/flags/1x1/be.svg";
 import cz from "flag-icons/flags/1x1/cz.svg";
+import de from "flag-icons/flags/1x1/de.svg";
 import dk from "flag-icons/flags/1x1/dk.svg";
 import es from "flag-icons/flags/1x1/es.svg";
 import fr from "flag-icons/flags/1x1/fr.svg";
@@ -9,6 +10,7 @@ import eng from "flag-icons/flags/1x1/gb-eng.svg";
 import wls from "flag-icons/flags/1x1/gb-wls.svg";
 import hr from "flag-icons/flags/1x1/hr.svg";
 import it from "flag-icons/flags/1x1/it.svg";
+import nl from "flag-icons/flags/1x1/nl.svg";
 import no from "flag-icons/flags/1x1/no.svg";
 import pt from "flag-icons/flags/1x1/pt.svg";
 import tr from "flag-icons/flags/1x1/tr.svg";
@@ -17,6 +19,8 @@ const FLAGS: Record<string, string> = {
   belgium: be,
   czechia: cz,
   denmark: dk,
+  germany: de,
+  netherlands: nl,
   spain: es,
   france: fr,
   england: eng,

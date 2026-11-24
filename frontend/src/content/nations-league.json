@@ -14,14 +14,31 @@
     "Tenk på det som et seriesystem. Nivå A er toppligaen, nivå B er «2. divisjon», og så videre nedover. De beste kan rykke opp, de dårligste rykker ned."
   ],
   "levelsTable": [
-    { "level": "A", "likeLeague": "Toppliga" },
-    { "level": "B", "likeLeague": "2. divisjon" },
-    { "level": "C", "likeLeague": "3. divisjon" },
-    { "level": "D", "likeLeague": "4. divisjon" }
+    {
+      "level": "A",
+      "likeLeague": "Toppliga"
+    },
+    {
+      "level": "B",
+      "likeLeague": "2. divisjon"
+    },
+    {
+      "level": "C",
+      "likeLeague": "3. divisjon"
+    },
+    {
+      "level": "D",
+      "likeLeague": "4. divisjon"
+    }
   ],
   "current": {
     "name": "Nations League 2026–27",
-    "levels": ["A", "B", "C", "D"],
+    "levels": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
     "levelA": {
       "teams": 16,
       "groups": 4,
@@ -30,13 +47,25 @@
       "format": "Alle møter alle, hjemme og borte."
     },
     "norway": {
-      "text": "Norge spiller på nivå A for første gang, i gruppe med Portugal, Danmark og Wales.",
+      "text": "Norge spilte på nivå A for første gang, i gruppe med Portugal, Danmark og Wales, og ble nr. 2 i gruppen.",
       "groupId": "unl-2026-27-a4"
     },
     "outcomesA": [
-      { "place": "1. og 2. plass", "result": "Kvartfinale i mars 2027, deretter semifinale og finale i juni 2027.", "tone": "qualified" },
-      { "place": "3. plass", "result": "Kamper mot en toer fra nivå B i mars 2027 for å bli på nivå A.", "tone": "playoff" },
-      { "place": "4. plass", "result": "Rykker ned til nivå B.", "tone": "neutral" }
+      {
+        "place": "1. og 2. plass",
+        "result": "Kvartfinale i mars 2027, deretter semifinale og finale i juni 2027.",
+        "tone": "qualified"
+      },
+      {
+        "place": "3. plass",
+        "result": "Kamper mot en toer fra nivå B i mars 2027 for å bli på nivå A.",
+        "tone": "playoff"
+      },
+      {
+        "place": "4. plass",
+        "result": "Rykker ned til nivå B.",
+        "tone": "neutral"
+      }
     ]
   },
   "ranking": [
@@ -50,11 +79,31 @@
     "backupSlots": "Antall playoffplasser er 2–4 og avhenger av hvordan det går for vertslandene (England, Skottland, Wales og Irland).",
     "qualifying": "Selve EM-kvaliken spilles i 2027. De 12 gruppevinnerne og de 8 beste toerne går direkte til EM. Playoff spilles i mars 2028.",
     "table": [
-      { "position": "1. plass i gruppe på nivå A", "seeding": "Førsteseedet", "backup": "Mulig, hvis laget ikke kvalifiserer seg via EM-kvaliken" },
-      { "position": "2. plass i gruppe på nivå A", "seeding": "Førsteseedet", "backup": "Nei" },
-      { "position": "3. plass i gruppe på nivå A", "seeding": "Førsteseedet", "backup": "Nei" },
-      { "position": "4. plass i gruppe på nivå A", "seeding": "Ikke førsteseedet (bare de 12 beste er det)", "backup": "Nei" },
-      { "position": "Gruppevinner på nivå B, C eller D", "seeding": "Ikke førsteseedet (alle lag på nivå A rangeres over)", "backup": "Mulig – de best rangerte gruppevinnerne som ikke har kvalifisert seg" }
+      {
+        "position": "1. plass i gruppe på nivå A",
+        "seeding": "Førsteseedet",
+        "backup": "Mulig, hvis laget ikke kvalifiserer seg via EM-kvaliken"
+      },
+      {
+        "position": "2. plass i gruppe på nivå A",
+        "seeding": "Førsteseedet",
+        "backup": "Nei"
+      },
+      {
+        "position": "3. plass i gruppe på nivå A",
+        "seeding": "Førsteseedet",
+        "backup": "Nei"
+      },
+      {
+        "position": "4. plass i gruppe på nivå A",
+        "seeding": "Ikke førsteseedet (bare de 12 beste er det)",
+        "backup": "Nei"
+      },
+      {
+        "position": "Gruppevinner på nivå B, C eller D",
+        "seeding": "Ikke førsteseedet (alle lag på nivå A rangeres over)",
+        "backup": "Mulig – de best rangerte gruppevinnerne som ikke har kvalifisert seg"
+      }
     ]
   },
   "worldCup": {
@@ -63,5 +112,122 @@
     "wc2030Leagues": "De 36 beste blir plassert i «Liga 1» i VM-kvaliken: 3 grupper à 12, i et format som ligner på Champions League. Resten havner i «Liga 2».",
     "wc2030Direct": "De best rangerte lagene i hver Liga 1-gruppe går direkte til VM. Antallet er ikke oppgitt. Resten av plassene avgjøres i playoff.",
     "wc2030Status": "Detaljene for VM 2030-kvaliken er ikke helt ferdige fra UEFA ennå."
+  },
+  "knockout": {
+    "_meta": {
+      "updatedAt": "2026-11-24",
+      "verification": "Kvartfinaleoppsett, semifinaleveier og datoer er sjekket mot UEFAs kampoppsett for sluttspillet (publisert etter trekningen 20.11.2026) og fotball.no. Kampdagene for semifinalene er ikke fordelt ennå.",
+      "sources": [
+        "https://www.uefa.com/uefanationsleague/news/02ab-221d9e23448d-d862e943f6f2-1000--uefa-nations-league-quarter-final-and-play-off-ties-spain-vs/",
+        "https://editorial.uefa.com/resources/02ab-221dcaa678f9-3cea105ae7bb-1000/unl_2627_-_league_a_ko_stage_fixture_list.pdf",
+        "https://www.fotball.no/landslag/norge-a-herrer/2026/norge-moter/"
+      ]
+    },
+    "notice": "Datoer og avsparkstider er hentet fra UEFAs kampoppsett etter trekningen 20. november 2026. UEFA kan endre dem. Kampdagene for semifinalene (9. eller 10. juni) er ikke fordelt ennå. Alle tider er norsk tid.",
+    "status": [
+      "Gruppespillet ble avsluttet 17. november 2026.",
+      "Norge ble nr. 2 i gruppe A4, bak Portugal og foran Danmark og Wales.",
+      "Norge sikret kvartfinaleplassen med 3–2 borte mot Danmark i Parken 17. november. Norge snudde fra 0–2, og Erling Braut Haaland avgjorde på straffe på overtid.",
+      "Kvartfinaletrekningen ble gjort i Nyon, Sveits, fredag 20. november 2026."
+    ],
+    "teamNames": {
+      "norway": "Norge",
+      "england": "England",
+      "spain": "Spania",
+      "france": "Frankrike",
+      "netherlands": "Nederland",
+      "portugal": "Portugal",
+      "belgium": "Belgia",
+      "germany": "Tyskland"
+    },
+    "quarterFinalsNote": "Dobbeltoppgjør, hjemme og borte. Gruppetoerne spiller første kamp hjemme.",
+    "quarterFinals": [
+      {
+        "id": "qf1",
+        "home": "norway",
+        "away": "england",
+        "legs": [
+          {
+            "kickoff": "2027-03-27T18:00:00+01:00",
+            "venue": "Ullevaal stadion"
+          },
+          {
+            "kickoff": "2027-03-30T20:45:00+02:00",
+            "venue": "Wembley"
+          }
+        ]
+      },
+      {
+        "id": "qf2",
+        "home": "spain",
+        "away": "france",
+        "legs": [
+          {
+            "kickoff": "2027-03-25T20:45:00+01:00"
+          },
+          {
+            "kickoff": "2027-03-28T20:45:00+02:00"
+          }
+        ]
+      },
+      {
+        "id": "qf3",
+        "home": "netherlands",
+        "away": "portugal",
+        "legs": [
+          {
+            "kickoff": "2027-03-27T20:45:00+01:00"
+          },
+          {
+            "kickoff": "2027-03-30T20:45:00+02:00"
+          }
+        ]
+      },
+      {
+        "id": "qf4",
+        "home": "belgium",
+        "away": "germany",
+        "legs": [
+          {
+            "kickoff": "2027-03-25T20:45:00+01:00"
+          },
+          {
+            "kickoff": "2027-03-28T20:45:00+02:00"
+          }
+        ]
+      }
+    ],
+    "semiFinals": [
+      {
+        "id": "sf1",
+        "from": [
+          "qf1",
+          "qf4"
+        ],
+        "when": "9. eller 10. juni 2027"
+      },
+      {
+        "id": "sf2",
+        "from": [
+          "qf3",
+          "qf2"
+        ],
+        "when": "9. eller 10. juni 2027"
+      }
+    ],
+    "final": {
+      "when": "13. juni 2027",
+      "note": "Bronsefinalen spilles samme dag."
+    },
+    "champions": [
+      "Portugal er regjerende mester og har vunnet to ganger (2019 og 2025). Frankrike vant i 2021 og Spania i 2023.",
+      "Norge, England, Tyskland, Belgia og Nederland kan alle vinne for første gang."
+    ],
+    "playoffs": "Opp- og nedrykkskampene mellom nivå A og nivå B spilles i samme periode, 25.–30. mars 2027. Danmark er ett av lagene fra nivå A. Hele oppsettet finnes på uefa.com.",
+    "euro2028": [
+      "Sluttspillet påvirker EM-kvaliken. Norge starter ikke EM-kvaliken i mars 2027, fordi kvartfinalen spilles da.",
+      "Går Norge til semifinale, havner Norge i en EM-kvalikgruppe med fire lag, som starter i september 2027. Ellers blir det en gruppe med fem lag, som starter i juni 2027.",
+      "Trekningen av EM-kvaliken er 6. desember 2026. Norge er sikret toppseeding."
+    ]
   }
 }
