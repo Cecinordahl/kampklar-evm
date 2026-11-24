@@ -1,15 +1,48 @@
 import { Link } from "react-router-dom";
 import nl from "../content/nations-league.json";
 import { Flow, KeyFacts, Sources, type FlowTone } from "../components/tournament/TournamentParts";
+import { KnockoutBracket, KnockoutNotice, QuarterFinalList } from "../components/tournament/Knockout";
 
 export function NationsLeaguePage() {
-  const { current, euro2028, worldCup } = nl;
+  const { current, euro2028, worldCup, knockout } = nl;
   const a = current.levelA;
 
   return (
     <>
       <p className="eyebrow">UEFA</p>
       <h1>Nations League</h1>
+
+      <section className="section" id="sluttspill">
+        <h2>Sluttspillet 2027</h2>
+        <ul className="fact-list">
+          {knockout.status.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+
+        <h3>Kvartfinaler, mars 2027</h3>
+        <p className="muted small">{knockout.quarterFinalsNote}</p>
+        <KnockoutNotice />
+        <QuarterFinalList highlightTeamIds={["norway"]} />
+
+        <h3>Veien til finalen</h3>
+        <KnockoutBracket />
+        <ul className="fact-list">
+          {knockout.champions.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+
+        <h3>Andre kamper i mars 2027</h3>
+        <p>{knockout.playoffs}</p>
+
+        <h3>Hva sluttspillet betyr for EM-kvaliken</h3>
+        <ul className="fact-list">
+          {knockout.euro2028.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      </section>
 
       <section className="section">
         <h2>Hva er Nations League?</h2>
@@ -118,7 +151,7 @@ export function NationsLeaguePage() {
         </p>
       </section>
 
-      <Sources urls={nl._meta.sources} generatedAt={nl._meta.generatedAt} />
+      <Sources urls={[...knockout._meta.sources, ...nl._meta.sources]} generatedAt={knockout._meta.updatedAt} />
     </>
   );
 }

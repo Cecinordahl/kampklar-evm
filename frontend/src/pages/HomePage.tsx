@@ -4,11 +4,12 @@ import { FavoriteButton } from "../components/FavoriteButton";
 import { MatchCard } from "../components/MatchCard";
 import { StandingsTable } from "../components/StandingsTable";
 import { LoadError, Loading } from "../components/Status";
+import { nextKnockoutLeg } from "../lib/knockout";
 import { isResultMissing } from "../lib/matches";
 import { useFavorites } from "../lib/useFavorites";
 import { useGroupMatches, useGroupsForTeam, useTeams } from "../lib/useFirestore";
 import { SUPPORTED_FAVORITE_TEAMS, type FavoriteTeam } from "../types/team";
-import type { Team } from "../types/firestore";
+import type { Match, Team } from "../types/firestore";
 
 export function HomePage() {
   const { favoriteIds } = useFavorites();
@@ -79,7 +80,8 @@ function TeamCard({ team, teams }: { team: FavoriteTeam; teams: Map<string, Team
   // A played game still waiting for its result gets its own card, so "Neste kamp" is always
   // a game that hasn't been played yet.
   const missingResults = teamMatches.filter((m) => isResultMissing(m));
-  const nextMatch = teamMatches.find((m) => m.status === "SCHEDULED" && !isResultMissing(m));
+  // After the group stage, "Neste kamp" is the team's next knockout leg (from the content file).
+  const nextMatch = teamMatches.find((m) => m.status === "SCHEDULED" && !isResultMissing(m)) ?? knockoutAsMatch(team.id);
   const playedCount = teamMatches.filter((m) => m.status === "FINISHED").length;
 
   const headingId = `team-card-${team.id}`;
@@ -146,4 +148,26 @@ function GamesPlayed({ played, total }: { played: number; total: number }) {
       ))}
     </span>
   );
+}
+
+/** The next knockout leg shaped as a Match, so MatchCard can show it. Only future legs, so the
+ * card never offers the admin result form for a match that isn't in Firestore. */
+function knockoutAsMatch(teamId: string): Match | undefined {
+  const leg = nextKnockoutLeg(teamId);
+  if (!leg) return undefined;
+  return {
+    id: `${leg.tieId}-${leg.leg}`,
+    competitionId: "unl-2026-27",
+    groupId: "",
+    homeTeamId: leg.homeTeamId,
+    awayTeamId: leg.awayTeamId,
+    kickoff: leg.kickoff,
+    status: "SCHEDULED",
+    homeGoals: null,
+    awayGoals: null,
+    homeLineup: [],
+    awayLineup: [],
+    homeScorerIds: [],
+    awayScorerIds: [],
+  };
 }

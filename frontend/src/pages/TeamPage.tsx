@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 import { FavoriteButton } from "../components/FavoriteButton";
 import { TeamNews } from "../components/TeamNews";
 import { MatchList } from "../components/MatchList";
+import { KnockoutNotice, QuarterFinalList } from "../components/tournament/Knockout";
+import { quarterFinalFor } from "../lib/knockout";
 import { EditableMatchList } from "../components/admin/EditableMatchList";
 import { PlayerEditForm } from "../components/admin/PlayerEditForm";
 import { TeamDetailsForm } from "../components/admin/TeamDetailsForm";
@@ -69,6 +71,17 @@ export function TeamPage() {
       </p>
       {currentCompetition && <p className="muted small">{currentCompetition}</p>}
       {admin.active && <TeamRefreshPanel team={team.data} />}
+
+      {quarterFinalFor(teamId) && (
+        <section className="section">
+          <h2>Nations League-kvartfinale</h2>
+          <QuarterFinalList teamId={teamId} />
+          <KnockoutNotice />
+          <p className="section-more">
+            <Link to="/nations-league#sluttspill">Se alle kvartfinalene og veien til finalen →</Link>
+          </p>
+        </section>
+      )}
 
       <section className="section">
         <h2>Kamper</h2>
